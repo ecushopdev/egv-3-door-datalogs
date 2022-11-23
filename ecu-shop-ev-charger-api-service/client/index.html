@@ -1,0 +1,18 @@
+<html>
+<head>
+  <script>
+    const socket = new WebSocket('ws://localhost:3000/ocpp/cp/1');
+    socket.onopen = function() {
+      console.log('Connected');
+      socket.send(
+        JSON.stringify([2, 'asdasdsadas', 'BootNotification', {}]),
+      );
+      socket.onmessage = function(data) {
+        console.log(data);
+      };
+    };
+  </script>
+</head>
+
+<body></body>
+</html>

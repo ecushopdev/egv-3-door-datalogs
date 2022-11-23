@@ -1,34 +1,35 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/common';
-import { PaymentService } from './payment.service';
-import { CreatePaymentDto } from './dto/create-payment.dto';
-import { UpdatePaymentDto } from './dto/update-payment.dto';
+import { Body, Controller, Post } from '@nestjs/common';
+import { ApiTags } from '@nestjs/swagger';
+import { HttpService } from '@nestjs/axios';
+import { ChargesPromptPayPaymentDto } from './dto/charges-prompt-pay-payment.dto';
+import { map } from 'rxjs';
 
 @Controller('payment')
+@ApiTags('payment')
 export class PaymentController {
-  constructor(private readonly paymentService: PaymentService) {}
-
-  @Post()
-  create(@Body() createPaymentDto: CreatePaymentDto) {
-    return this.paymentService.create(createPaymentDto);
+  constructor(private readonly httpService: HttpService) {
+    this.httpService.axiosRef.interceptors.request.use((req) => {
+      let headers = {};
+      headers['Authorization'] =
+        'Basic c2tleV90ZXN0XzV0dmo5c3dhN2M5M25yemQ1eTQ=';
+      req.headers = { ...req.headers, ...headers };
+      return req;
+    });
   }
 
-  @Get()
-  findAll() {
-    return this.paymentService.findAll();
-  }
-
-  @Get(':id')
-  findOne(@Param('id') id: string) {
-    return this.paymentService.findOne(+id);
-  }
-
-  @Patch(':id')
-  update(@Param('id') id: string, @Body() updatePaymentDto: UpdatePaymentDto) {
-    return this.paymentService.update(+id, updatePaymentDto);
-  }
-
-  @Delete(':id')
-  remove(@Param('id') id: string) {
-    return this.paymentService.remove(+id);
+  @Post('charges/promptpay')
+  charges(@Body() chargesPromptPayPaymentDto: ChargesPromptPayPaymentDto): any {
+    const data = {
+      source: { type: 'promptpay' },
+      ...chargesPromptPayPaymentDto,
+    };
+    return this.httpService.post('https://api.omise.co/charges', data).pipe(
+      map((res) => {
+        if (res.status === 200) {
+          return res.data.source.scannable_code;
+        }
+        return res.data;
+      }),
+    );
   }
 }
