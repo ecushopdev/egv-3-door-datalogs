@@ -18,9 +18,23 @@ Content-Type: application/json
   "amount": 400000,
   "currency": "THB",
   "source": "src_test_5tw0mhj9y5wuddqyxlz",
-  "metadata": {
-    "vehicle_id": "TESLA101"
-  }
+  "metadata": {},
+  "expires_at": "promptpay"
+}
+
+###
+
+POST https://api.omise.co/charges
+Authorization: Basic {{OMISE_SECRET_KEY}}
+Content-Type: application/json
+
+{
+  "amount": 400000,
+  "currency": "THB",
+  "source": {
+    "type": "promptpay"
+  },
+  "metadata": {}
 }
 
 ###
