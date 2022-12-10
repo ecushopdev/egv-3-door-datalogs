@@ -1,7 +1,7 @@
 <html>
 <head>
   <script>
-    const socket = new WebSocket('ws://localhost:4000/egv-datalog', 'egv-sender');
+    const socket = new WebSocket('ws://api.ecu-shop.com/egv-datalog', 'egv-sender');
     socket.onopen = function() {
       console.log('Connected');
       socket.send(

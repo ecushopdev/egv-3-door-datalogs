@@ -1,13 +1,11 @@
 import { Module } from '@nestjs/common';
-import { MongooseModule } from '@nestjs/mongoose';
 import { DatalogService } from './datalog.service';
-import { DataLog, DatalogSchema } from './schemas/datalog.schema';
+import { DatabaseModule } from '../database/database.module';
+import { datalogProviders } from './datalog.providers';
 
 @Module({
-  imports: [
-    MongooseModule.forFeature([{ name: DataLog.name, schema: DatalogSchema }]),
-  ],
-  providers: [DatalogService],
+  imports: [DatabaseModule],
+  providers: [DatalogService, ...datalogProviders],
   exports: [DatalogService],
 })
 export class DatalogModule {}
