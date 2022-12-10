@@ -129,17 +129,10 @@ export class WsAdapter extends AbstractWsAdapter {
     try {
       const message = JSON.parse(buffer.data);
       const messageHandler = handlers.find((handler) => {
-        const normalCondition = handler.message === message.event;
-
-        const ocppCondition =
-          Array.isArray(message) &&
-          handler.message === message[2] &&
-          message[0] === 2;
-
-        return ocppCondition;
+        return handler.message === message.event;
       });
       const { callback } = messageHandler;
-      return transform(callback(message));
+      return transform(callback(message.data));
     } catch {
       return EMPTY;
     }
@@ -153,6 +146,7 @@ export class WsAdapter extends AbstractWsAdapter {
     return server;
   }
 
+  // eslint-disable-next-line @typescript-eslint/ban-types
   public bindClientDisconnect(client: any, callback: Function) {
     client.on(CLOSE_EVENT, callback);
   }
@@ -183,7 +177,7 @@ export class WsAdapter extends AbstractWsAdapter {
 
       let isRequestDelegated = false;
       for (const wsServer of wsServersCollection) {
-        const pathPattern = new UrlPattern('/ocpp/cp/:id');
+        const pathPattern = new UrlPattern('/egv-datalog');
         const matchPattern = pathPattern.match(pathname);
         if (matchPattern !== null || pathname === wsServer.path) {
           request.headers = { ...request.headers, pathParams: matchPattern };

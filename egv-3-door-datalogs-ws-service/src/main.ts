@@ -21,18 +21,18 @@ export const createNestServer = async (expressInstance: express.Express) => {
 
   app.setGlobalPrefix('api/v1');
   app.enableCors();
-  app.use(
-    helmet({
-      contentSecurityPolicy: {
-        directives: {
-          defaultSrc: [`'self'`],
-          styleSrc: [`'self'`, `'unsafe-inline'`],
-          imgSrc: [`'self'`, 'data:', 'validator.swagger.io'],
-          scriptSrc: [`'self'`, `https: 'unsafe-inline'`],
-        },
-      },
-    }),
-  );
+  // app.use(
+  //   helmet({
+  //     contentSecurityPolicy: {
+  //       directives: {
+  //         defaultSrc: [`'self'`],
+  //         styleSrc: [`'self'`, `'unsafe-inline'`],
+  //         imgSrc: [`'self'`, 'data:', 'validator.swagger.io'],
+  //         scriptSrc: [`'self'`, `https: 'unsafe-inline'`],
+  //       },
+  //     },
+  //   }),
+  // );
 
   app.use(
     ['/api/v1/docs/'],
@@ -47,10 +47,8 @@ export const createNestServer = async (expressInstance: express.Express) => {
 
   const config = new DocumentBuilder()
     .addBearerAuth()
-    .setTitle('ECU-SHOP EV API')
+    .setTitle('EGV 3 Door')
     .setVersion('1.0')
-    .addTag('omise-webhook')
-    .addTag('payment')
     .build();
 
   const document = SwaggerModule.createDocument(app, config);

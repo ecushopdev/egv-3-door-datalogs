@@ -1,11 +1,34 @@
 <html>
 <head>
   <script>
-    const socket = new WebSocket('ws://localhost:3000/ocpp/cp/1');
+    const socket = new WebSocket('ws://localhost:3000/egv-datalog');
     socket.onopen = function() {
       console.log('Connected');
       socket.send(
-        JSON.stringify([2, 'asdasdsadas', 'BootNotification', {}]),
+        JSON.stringify({
+          event: 'Datalog',
+          data: {
+            soc: 0,
+            rangeToGo: 0,
+            speed: 0,
+            voltBatt: 0,
+            motorRPM: 0,
+            motorVolt: 0,
+            motorCurrent: 0,
+            motorTorque: 0,
+            acpMain: 0,
+            acpSub: 0,
+            ect1: 0,
+            ect2: 0,
+            stearing: 0,
+            breakPos: 0,
+            gearPos: 0,
+            aBatt: 0,
+            errorMotor1: false,
+            errorMotor2: false,
+            errorMotor3: false,
+          },
+        }),
       );
       socket.onmessage = function(data) {
         console.log(data);
