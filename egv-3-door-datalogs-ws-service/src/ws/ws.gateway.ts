@@ -1,41 +1,33 @@
 import {
-  ConnectedSocket,
   MessageBody,
   SubscribeMessage,
   WebSocketGateway,
+  WebSocketServer,
 } from '@nestjs/websockets';
-import WebSocket from 'ws';
-
-interface DataLogRequest {
-  soc: number;
-  rangeToGo: number;
-  speed: number;
-  voltBatt: number;
-  motorRPM: number;
-  motorVolt: number;
-  motorCurrent: number;
-  motorTorque: number;
-  acpMain: number;
-  acpSub: number;
-  ect1: number;
-  ect2: number;
-  stearing: number;
-  breakPos: number;
-  gearPos: number;
-  aBatt: number;
-  errorMotor1: boolean;
-  errorMotor2: boolean;
-  errorMotor3: boolean;
-  timestamp: Date;
-}
+import { DatalogService } from '../datalog/datalog.service';
+import { CreateDatalogDto } from '../datalog/dto/create-datalog.dto';
+import WebSocket, { Server } from 'ws';
 
 @WebSocketGateway()
 export class WsGateway {
+  constructor(private readonly datalogService: DatalogService) {}
+
+  @WebSocketServer()
+  server: Server;
+
+  private broadcast(message: any) {
+    const broadCastMessage = JSON.stringify(message);
+    this.server.clients.forEach((client: WebSocket) => {
+      if (client.protocol === 'egv-monitor') {
+        client.send(broadCastMessage);
+      }
+    });
+  }
+
   @SubscribeMessage('Datalog')
-  statusNotification(
-    @MessageBody() request: DataLogRequest,
-    @ConnectedSocket() client: WebSocket,
-  ) {
+  async statusNotification(@MessageBody() request: CreateDatalogDto) {
+    const doc = await this.datalogService.create(request);
+    this.broadcast(doc);
     return { status: 'Accepted' };
   }
 }

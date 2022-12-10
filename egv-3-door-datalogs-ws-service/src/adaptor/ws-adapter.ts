@@ -171,6 +171,7 @@ export class WsAdapter extends AbstractWsAdapter {
     this.httpServersRegistry.set(port, httpServer);
 
     httpServer.on('upgrade', (request, socket, head) => {
+      const protocol = request.headers['sec-websocket-protocol'];
       const baseUrl = 'ws://' + request.headers.host + '/';
       const pathname = new URL(request.url, baseUrl).pathname;
       const wsServersCollection = this.wsServersRegistry.get(port);
@@ -178,8 +179,13 @@ export class WsAdapter extends AbstractWsAdapter {
       let isRequestDelegated = false;
       for (const wsServer of wsServersCollection) {
         const pathPattern = new UrlPattern('/egv-datalog');
+        const pathPatternMonitor = new UrlPattern('/egv-datalog-monitor');
         const matchPattern = pathPattern.match(pathname);
-        if (matchPattern !== null || pathname === wsServer.path) {
+        const matchPatternMonitor = pathPatternMonitor.match(pathname);
+        if (
+          (matchPattern !== null && protocol === 'egv-sender') ||
+          (matchPatternMonitor !== null && protocol === 'egv-monitor')
+        ) {
           request.headers = { ...request.headers, pathParams: matchPattern };
           wsServer.handleUpgrade(request, socket, head, function done(ws) {
             wsServer.emit('connection', ws, request);

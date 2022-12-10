@@ -1,7 +1,7 @@
 <html>
 <head>
   <script>
-    const socket = new WebSocket('ws://localhost:3000/egv-datalog');
+    const socket = new WebSocket('ws://localhost:3000/egv-datalog', 'egv-sender');
     socket.onopen = function() {
       console.log('Connected');
       socket.send(
@@ -27,6 +27,7 @@
             errorMotor1: false,
             errorMotor2: false,
             errorMotor3: false,
+            timestamp: new Date(),
           },
         }),
       );

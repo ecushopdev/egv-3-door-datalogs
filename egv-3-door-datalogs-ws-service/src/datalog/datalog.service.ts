@@ -1,26 +1,29 @@
 import { Injectable } from '@nestjs/common';
+import { InjectModel } from '@nestjs/mongoose';
+import { Model } from 'mongoose';
 import { CreateDatalogDto } from './dto/create-datalog.dto';
-import { UpdateDatalogDto } from './dto/update-datalog.dto';
+import { DataLog, DataLogDocument } from './schemas/datalog.schema';
 
 @Injectable()
 export class DatalogService {
-  create(createDatalogDto: CreateDatalogDto) {
-    return 'This action adds a new datalog';
+  constructor(
+    @InjectModel(DataLog.name)
+    private readonly dataLogModel: Model<DataLogDocument>,
+  ) {}
+
+  async create(createDataLogDto: CreateDatalogDto): Promise<DataLog> {
+    return await this.dataLogModel.create(createDataLogDto);
   }
 
-  findAll() {
-    return `This action returns all datalog`;
+  async findAll(): Promise<DataLog[]> {
+    return this.dataLogModel.find().exec();
   }
 
-  findOne(id: number) {
-    return `This action returns a #${id} datalog`;
+  async findOne(id: string): Promise<DataLog> {
+    return this.dataLogModel.findOne({ _id: id }).exec();
   }
 
-  update(id: number, updateDatalogDto: UpdateDatalogDto) {
-    return `This action updates a #${id} datalog`;
-  }
-
-  remove(id: number) {
-    return `This action removes a #${id} datalog`;
+  async delete(id: string) {
+    return await this.dataLogModel.findByIdAndRemove({ _id: id }).exec();
   }
 }
