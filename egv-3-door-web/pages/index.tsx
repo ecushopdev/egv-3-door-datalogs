@@ -1,8 +1,9 @@
-import { Router } from 'next/router'
-import React, { useEffect } from 'react'
+import React from 'react'
 
 const index = () => {
-  return ''
+    return (
+        <div>index</div>
+    )
 }
 
 export default index
