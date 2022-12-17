@@ -19,7 +19,7 @@ export const createNestServer = async (expressInstance: express.Express) => {
   app.enableCors();
   app.useWebSocketAdapter(new WsAdapter(app));
 
-  const port = process.env.PORT || 4000;
+  const port = process.env.PORT || 4001;
   await app.listen(port);
 
   console.log(`Application is running on: ${await app.getUrl()}`);
