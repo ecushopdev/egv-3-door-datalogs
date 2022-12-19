@@ -23,7 +23,7 @@ export const createNestServer = async (expressInstance: express.Express) => {
     {},
   );
 
-  app.setGlobalPrefix('api/v1');
+  app.setGlobalPrefix('egv/api/v1');
 
   app.use(
     ['/api/v1/docs/'],
@@ -52,7 +52,7 @@ export const createNestServer = async (expressInstance: express.Express) => {
     },
   };
 
-  SwaggerModule.setup('api/v1/docs', app, document, options);
+  SwaggerModule.setup('egv/api/v1/docs', app, document, options);
 
   app.enableCors();
   app.useWebSocketAdapter(new WsAdapter(app));
@@ -62,6 +62,9 @@ export const createNestServer = async (expressInstance: express.Express) => {
 
   console.log(`Application is running on: ${await app.getUrl()}`);
   console.log(`WebSockets is running on: ${await app.getUrl()}/egv-datalog`);
+  console.log(
+    `WebSockets is running on: ${await app.getUrl()}/egv-datalog-monitor`,
+  );
 };
 
 createNestServer(server)

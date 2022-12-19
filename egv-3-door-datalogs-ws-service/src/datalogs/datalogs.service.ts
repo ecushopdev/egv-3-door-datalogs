@@ -15,6 +15,10 @@ export class DataLogsService {
     return await this.dataLogsModel.create(createCatDto);
   }
 
+  async createMany(createCatDto: CreateDatalogDto[]): Promise<DataLogs[]> {
+    return await this.dataLogsModel.insertMany(createCatDto);
+  }
+
   async findAll(param: {
     filter?: FilterQuery<DataLogs>;
     projection?: ProjectionType<DataLogs>;

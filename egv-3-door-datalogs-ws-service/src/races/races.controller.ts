@@ -5,6 +5,7 @@ import {
   Delete,
   Get,
   HttpStatus,
+  NotFoundException,
   Param,
   Patch,
   Post,
@@ -14,8 +15,10 @@ import { RacesService } from './races.service';
 import { CreateRaceDto } from './dto/create-race.dto';
 import { UpdateRaceDto } from './dto/update-race.dto';
 import {
+  ApiBody,
   ApiCreatedResponse,
   ApiNoContentResponse,
+  ApiNotFoundResponse,
   ApiOkResponse,
   ApiTags,
 } from '@nestjs/swagger';
@@ -26,12 +29,16 @@ import { ParseObjectIdPipe } from '../common/pipe/ParseObjectId.pipe';
 import { Races, RaceStatus } from './schema/race.schema';
 import { Response } from 'express';
 import { WsGateway } from '../ws/ws.gateway';
+import { CreateDatalogDto } from '../datalogs/dto/create-datalog.dto';
+import { NotFoundErrorEntity } from '../common/entities/not-found-error.entity';
+import { DataLogsService } from '../datalogs/datalogs.service';
 
 @Controller('races')
 @ApiTags('Races')
 export class RacesController {
   constructor(
     private readonly racesService: RacesService,
+    private readonly datalogsService: DataLogsService,
     private readonly wsGateway: WsGateway,
   ) {}
 
@@ -54,12 +61,18 @@ export class RacesController {
 
   @Get(':id')
   @ApiOkResponse({ type: RaceEntity })
-  findOne(@Param('id', new ParseObjectIdPipe()) id: string) {
-    return this.racesService.findOneAggregation(id);
+  @ApiNotFoundResponse({ type: NotFoundErrorEntity })
+  async findOne(@Param('id', new ParseObjectIdPipe()) id: string) {
+    const response = await this.racesService.findOneAggregation(id);
+    if (!response) {
+      throw new NotFoundException('Not found race');
+    }
+    return response;
   }
 
   @Patch(':id')
   @ApiOkResponse({ type: RaceEntity })
+  @ApiNotFoundResponse({ type: NotFoundErrorEntity })
   async update(
     @Param('id', new ParseObjectIdPipe()) id: string,
     @Body() updateRaceDto: UpdateRaceDto,
@@ -92,6 +105,27 @@ export class RacesController {
     @Res() res: Response,
   ) {
     await this.racesService.remove(id);
+    return res.status(HttpStatus.NO_CONTENT).send();
+  }
+
+  @Post(':id/datalogs')
+  @ApiNoContentResponse()
+  @ApiNotFoundResponse({ type: NotFoundErrorEntity })
+  @ApiBody({ type: CreateDatalogDto, isArray: true })
+  async addDataLogs(
+    @Param('id', new ParseObjectIdPipe()) id: string,
+    @Body() createDatalogDto: CreateDatalogDto[],
+    @Res() res: Response,
+  ) {
+    const race = await this.racesService.findOne(id);
+    if (!race) {
+      throw new NotFoundException('Not found race');
+    }
+    const data = createDatalogDto.map((item) => ({
+      ...item,
+      race: id,
+    }));
+    await this.datalogsService.createMany(data);
     return res.status(HttpStatus.NO_CONTENT).send();
   }
 }

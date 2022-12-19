@@ -52,9 +52,7 @@ export class RacesService {
       },
     ];
     const response = await this.racesModel.aggregate(pipeline).exec();
-    if (!response[0]) {
-      throw new NotFoundException('Not found race');
-    }
+    if (!response[0]) return null;
     response[0].id = response[0]._id;
     delete response[0]._id;
     return response[0];
