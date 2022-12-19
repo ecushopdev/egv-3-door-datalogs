@@ -15,6 +15,7 @@ import { RacesService } from './races.service';
 import { CreateRaceDto } from './dto/create-race.dto';
 import { UpdateRaceDto } from './dto/update-race.dto';
 import {
+  ApiBadRequestResponse,
   ApiBody,
   ApiCreatedResponse,
   ApiNoContentResponse,
@@ -32,6 +33,7 @@ import { WsGateway } from '../ws/ws.gateway';
 import { CreateDatalogDto } from '../datalogs/dto/create-datalog.dto';
 import { NotFoundErrorEntity } from '../common/entities/not-found-error.entity';
 import { DataLogsService } from '../datalogs/datalogs.service';
+import { BadRequestErrorEntity } from '../common/entities/bad-request-error.entity';
 
 @Controller('races')
 @ApiTags('Races')
@@ -73,6 +75,7 @@ export class RacesController {
   @Patch(':id')
   @ApiOkResponse({ type: RaceEntity })
   @ApiNotFoundResponse({ type: NotFoundErrorEntity })
+  @ApiBadRequestResponse({ type: BadRequestErrorEntity })
   async update(
     @Param('id', new ParseObjectIdPipe()) id: string,
     @Body() updateRaceDto: UpdateRaceDto,
@@ -111,6 +114,7 @@ export class RacesController {
   @Post(':id/datalogs')
   @ApiNoContentResponse()
   @ApiNotFoundResponse({ type: NotFoundErrorEntity })
+  @ApiBadRequestResponse({ type: BadRequestErrorEntity })
   @ApiBody({ type: CreateDatalogDto, isArray: true })
   async addDataLogs(
     @Param('id', new ParseObjectIdPipe()) id: string,
@@ -120,6 +124,9 @@ export class RacesController {
     const race = await this.racesService.findOne(id);
     if (!race) {
       throw new NotFoundException('Not found race');
+    }
+    if (race.stopTimestamp) {
+      throw new BadRequestException('This race is finished');
     }
     const data: CreateDatalogDto[] = createDatalogDto.map((item) => ({
       ...item,

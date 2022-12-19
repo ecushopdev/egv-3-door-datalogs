@@ -1,5 +1,6 @@
 import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
 import { RaceStatus } from '../schema/race.schema';
+import { DatalogsEntity } from '../../datalogs/entities/datalogs.entity';
 
 export class RaceEntity {
   @ApiProperty({
@@ -14,4 +15,7 @@ export class RaceEntity {
 
   @ApiPropertyOptional({ type: Date })
   stopTimestamp?: Date = undefined;
+
+  @ApiPropertyOptional({ type: DatalogsEntity, isArray: true })
+  datalogs: DatalogsEntity[] = undefined;
 }
