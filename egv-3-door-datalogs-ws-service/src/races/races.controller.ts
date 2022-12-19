@@ -121,7 +121,7 @@ export class RacesController {
     if (!race) {
       throw new NotFoundException('Not found race');
     }
-    const data = createDatalogDto.map((item) => ({
+    const data: CreateDatalogDto[] = createDatalogDto.map((item) => ({
       ...item,
       race: id,
     }));
