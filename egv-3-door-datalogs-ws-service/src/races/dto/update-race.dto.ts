@@ -1,4 +1,4 @@
-import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
+import { ApiProperty } from '@nestjs/swagger';
 import { RaceStatus } from '../schema/race.schema';
 
 export class UpdateRaceDto {
@@ -8,7 +8,4 @@ export class UpdateRaceDto {
     default: RaceStatus.Created,
   })
   status: RaceStatus = RaceStatus.Created;
-
-  @ApiPropertyOptional({ type: Date })
-  stopTimestamp?: Date = undefined;
 }

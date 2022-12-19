@@ -15,8 +15,11 @@ export class WsGateway {
   @WebSocketServer()
   server: Server;
 
-  private broadcast(message: any) {
-    const broadCastMessage = JSON.stringify(message);
+  broadcast(event: string, data: any) {
+    const broadCastMessage = JSON.stringify({
+      event,
+      data,
+    });
     this.server.clients.forEach((client: WebSocket) => {
       if (client.protocol === 'egv-monitor') {
         client.send(broadCastMessage);
@@ -27,7 +30,7 @@ export class WsGateway {
   @SubscribeMessage('Datalog')
   async statusNotification(@MessageBody() request: CreateDatalogDto) {
     const doc = await this.dataLogsService.create(request);
-    this.broadcast(doc);
+    this.broadcast('Monitor', doc);
     return { status: 'Accepted' };
   }
 }

@@ -24,8 +24,6 @@ export const createNestServer = async (expressInstance: express.Express) => {
   );
 
   app.setGlobalPrefix('api/v1');
-  app.enableCors();
-  app.useWebSocketAdapter(new WsAdapter(app));
 
   app.use(
     ['/api/v1/docs/'],
@@ -55,6 +53,9 @@ export const createNestServer = async (expressInstance: express.Express) => {
   };
 
   SwaggerModule.setup('api/v1/docs', app, document, options);
+
+  app.enableCors();
+  app.useWebSocketAdapter(new WsAdapter(app));
 
   const port = process.env.PORT || 4000;
   await app.listen(port);

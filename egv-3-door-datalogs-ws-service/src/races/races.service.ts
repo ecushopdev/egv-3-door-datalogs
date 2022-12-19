@@ -1,9 +1,16 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, NotFoundException } from '@nestjs/common';
 import { CreateRaceDto } from './dto/create-race.dto';
-import { UpdateRaceDto } from './dto/update-race.dto';
-import { Model, Schema as MongooseSchema } from 'mongoose';
+import {
+  FilterQuery,
+  Model,
+  PipelineStage,
+  ProjectionType,
+  QueryOptions,
+  UpdateQuery,
+} from 'mongoose';
 import { Races, RacesDocument } from './schema/race.schema';
 import { InjectModel } from '@nestjs/mongoose';
+import { ObjectId } from 'mongodb';
 
 @Injectable()
 export class RacesService {
@@ -15,22 +22,51 @@ export class RacesService {
     return await this.racesModel.create(createRaceDto);
   }
 
-  async findAll() {
-    return await this.racesModel.find().exec();
+  async findAll(param: {
+    filter?: FilterQuery<Races>;
+    projection?: ProjectionType<Races>;
+    options?: QueryOptions<Races>;
+  }) {
+    const { filter, projection, options } = param;
+    return await this.racesModel.find(filter, projection, options).exec();
   }
 
-  async findOne(id: MongooseSchema.Types.ObjectId) {
+  async findOne(id: string) {
     return await this.racesModel.findOne({ _id: id }).exec();
   }
 
-  async update(
-    id: MongooseSchema.Types.ObjectId,
-    updateRaceDto: UpdateRaceDto,
-  ) {
-    return await this.racesModel.updateOne({ _id: id }, updateRaceDto).exec();
+  async findOneAggregation(id: string) {
+    const pipeline: PipelineStage[] = [
+      {
+        $match: {
+          _id: new ObjectId(id),
+        },
+      },
+      {
+        $lookup: {
+          from: 'DataLogs',
+          localField: 'race',
+          foreignField: '_id',
+          as: 'dataLogs',
+        },
+      },
+    ];
+    const response = await this.racesModel.aggregate(pipeline).exec();
+    if (!response[0]) {
+      throw new NotFoundException('Not found race');
+    }
+    response[0].id = response[0]._id;
+    delete response[0]._id;
+    return response[0];
   }
 
-  async remove(id: MongooseSchema.Types.ObjectId) {
+  async update(id: string, update: UpdateQuery<Races>) {
+    return await this.racesModel
+      .findOneAndUpdate({ _id: id }, update, { new: true })
+      .exec();
+  }
+
+  async remove(id: string) {
     return await this.racesModel.findByIdAndRemove({ _id: id }).exec();
   }
 }

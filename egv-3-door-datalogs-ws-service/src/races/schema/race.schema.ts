@@ -14,7 +14,7 @@ enum RaceStatus {
 @Schema({
   collection: 'Races',
   versionKey: false,
-  timestamps: { createdAt: true, updatedAt: false },
+  timestamps: { createdAt: false, updatedAt: false },
   toJSON: {
     transform: (doc: RacesDocument, ret) => {
       ret.id = ret._id;
