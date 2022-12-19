@@ -1,4 +1,4 @@
-import { Module } from '@nestjs/common';
+import { CacheModule, Module } from '@nestjs/common';
 import { WsModule } from './ws/ws.module';
 import { ConfigModule } from '@nestjs/config';
 import { MongooseModule } from '@nestjs/mongoose';
@@ -29,6 +29,7 @@ if (process.env.NODE_ENV === 'production') {
   imports: [
     ConfigModule.forRoot(),
     MongooseModule.forRoot(process.env.DATABASE_URL, options),
+    CacheModule.register(),
     WsModule,
     DataLogsModule,
     RacesModule,

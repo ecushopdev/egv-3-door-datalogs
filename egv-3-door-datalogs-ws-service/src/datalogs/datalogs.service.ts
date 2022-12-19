@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { DataLogs, DataLogsDocument } from './schema/datalogs.schema';
-import { Model } from 'mongoose';
+import { FilterQuery, Model, ProjectionType, QueryOptions } from 'mongoose';
 import { InjectModel } from '@nestjs/mongoose';
 import { CreateDatalogDto } from './dto/create-datalog.dto';
 
@@ -13,5 +13,14 @@ export class DataLogsService {
 
   async create(createCatDto: CreateDatalogDto): Promise<DataLogs> {
     return await this.dataLogsModel.create(createCatDto);
+  }
+
+  async findAll(param: {
+    filter?: FilterQuery<DataLogs>;
+    projection?: ProjectionType<DataLogs>;
+    options?: QueryOptions<DataLogs>;
+  }): Promise<DataLogs[]> {
+    const { filter, projection, options } = param;
+    return this.dataLogsModel.find(filter, projection, options).exec();
   }
 }
