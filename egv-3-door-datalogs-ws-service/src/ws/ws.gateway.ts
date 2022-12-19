@@ -4,13 +4,13 @@ import {
   WebSocketGateway,
   WebSocketServer,
 } from '@nestjs/websockets';
-import { DatalogService } from '../datalog/datalog.service';
-import { CreateDatalogDto } from '../datalog/dto/create-datalog.dto';
+import { DataLogsService } from '../datalogs/datalogs.service';
+import { CreateDatalogDto } from '../datalogs/dto/create-datalog.dto';
 import WebSocket, { Server } from 'ws';
 
 @WebSocketGateway()
 export class WsGateway {
-  constructor(private readonly datalogService: DatalogService) {}
+  constructor(private readonly dataLogsService: DataLogsService) {}
 
   @WebSocketServer()
   server: Server;
@@ -26,7 +26,7 @@ export class WsGateway {
 
   @SubscribeMessage('Datalog')
   async statusNotification(@MessageBody() request: CreateDatalogDto) {
-    const doc = await this.datalogService.create(request);
+    const doc = await this.dataLogsService.create(request);
     this.broadcast(doc);
     return { status: 'Accepted' };
   }
