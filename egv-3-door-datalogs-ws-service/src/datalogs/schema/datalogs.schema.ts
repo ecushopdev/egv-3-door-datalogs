@@ -1,9 +1,11 @@
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 import { HydratedDocument } from 'mongoose';
+import { Schema as MongooseSchema } from 'mongoose';
 
 export type DataLogsDocument = HydratedDocument<DataLogs>;
 
 @Schema({
+  collection: 'DataLogs',
   versionKey: false,
   timestamps: { createdAt: true, updatedAt: false },
   toJSON: {
@@ -14,6 +16,12 @@ export type DataLogsDocument = HydratedDocument<DataLogs>;
   },
 })
 export class DataLogs {
+  @Prop({
+    type: MongooseSchema.Types.ObjectId,
+    ref: 'Races',
+    isRequired: false,
+  })
+  race?: string;
   @Prop()
   soc: number;
   @Prop()

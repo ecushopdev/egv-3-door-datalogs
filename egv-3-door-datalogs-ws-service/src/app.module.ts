@@ -4,6 +4,7 @@ import { ConfigModule } from '@nestjs/config';
 import { MongooseModule } from '@nestjs/mongoose';
 import { MongooseModuleOptions } from '@nestjs/mongoose/dist/interfaces/mongoose-options.interface';
 import { DataLogsModule } from './datalogs/datalogs.module';
+import { RacesModule } from './races/races.module';
 
 const prdOption: MongooseModuleOptions = {
   replicaSet: 'rs0',
@@ -30,6 +31,7 @@ if (process.env.NODE_ENV === 'production') {
     MongooseModule.forRoot(process.env.DATABASE_URL, options),
     WsModule,
     DataLogsModule,
+    RacesModule,
   ],
 })
 export class AppModule {}

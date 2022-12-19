@@ -2,6 +2,7 @@ import { Module } from '@nestjs/common';
 import { DataLogsService } from './datalogs.service';
 import { MongooseModule } from '@nestjs/mongoose';
 import { DataLogs, DataLogsSchema } from './schema/datalogs.schema';
+import { DataLogsController } from './datalogs.controller';
 
 @Module({
   imports: [
@@ -9,6 +10,7 @@ import { DataLogs, DataLogsSchema } from './schema/datalogs.schema';
       { name: DataLogs.name, schema: DataLogsSchema },
     ]),
   ],
+  controllers: [DataLogsController],
   providers: [DataLogsService],
   exports: [DataLogsService],
 })
