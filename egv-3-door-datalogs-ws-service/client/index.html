@@ -1,7 +1,7 @@
 <html>
 <head>
   <script>
-    const socket = new WebSocket('ws://api.ecu-shop.com/egv-datalog', 'egv-sender');
+    const socket = new WebSocket('ws://localhost:4000/egv-datalog', 'egv-sender');
     socket.onopen = function() {
       console.log('Connected');
       socket.send(
@@ -12,10 +12,18 @@
             rangeToGo: 0,
             speed: 0,
             voltBatt: 0,
-            motorRPM: 0,
-            motorVolt: 0,
-            motorCurrent: 0,
-            motorTorque: 0,
+            motor1RPM: 0,
+            motor1Volt: 0,
+            motor1Current: 0,
+            motor1Torque: 0,
+            motor2RPM: 0,
+            motor2Volt: 0,
+            motor2Current: 0,
+            motor2Torque: 0,
+            motor3RPM: 0,
+            motor3Volt: 0,
+            motor3Current: 0,
+            motor3Torque: 0,
             acpMain: 0,
             acpSub: 0,
             ect1: 0,
