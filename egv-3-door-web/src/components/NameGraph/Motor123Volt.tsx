@@ -37,7 +37,7 @@ interface Props {
     clear: boolean
 }
 
-const Motor123Volt = (props: Props) => {
+const Motor123VoltGraph = (props: Props) => {
     const { data } = props
     const theme = useTheme();
 
@@ -156,4 +156,4 @@ const Motor123Volt = (props: Props) => {
     )
 }
 
-export default Motor123Volt
+export default Motor123VoltGraph

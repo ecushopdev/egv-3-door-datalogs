@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import {
     Chart as ChartJS,
     CategoryScale,
@@ -13,9 +13,7 @@ import {
     ChartData,
 } from 'chart.js';
 import { Line } from 'react-chartjs-2';
-import { Button, Grid, ButtonProps } from '@mui/material';
 import { useTheme } from '@mui/material';
-import dayjs from 'dayjs';
 
 import 'chartjs-adapter-dayjs-3';
 import { typeEgvSenderData } from '../../util/type/TypeEgvData';
@@ -139,7 +137,7 @@ const VoltBattGraph = (props: Props) => {
         <Line
             data={dataX}
             options={options}
-            height={'250'}
+        // height={'250'}
         // width={350} 
         />
     )

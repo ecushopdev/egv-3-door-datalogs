@@ -37,36 +37,24 @@ interface Props {
     clear: boolean
 }
 
-const Motor123CurrentGraph = (props: Props) => {
+const StearingGraph = (props: Props) => {
     const { data } = props
     const theme = useTheme();
 
     const [allData, setAllData] = useState<typeEgvSenderData[] | null>(null)
 
     const labels = allData ? allData.map((item) => item.timestamp) : []
-    const motor1 = allData ? allData.map((item) => item.motor1Current ? item.motor1Current : null) : []
-    const motor2 = allData ? allData.map((item) => item.motor2Current ? item.motor2Current : null) : []
-    const motor3 = allData ? allData.map((item) => item.motor3Current ? item.motor3Current : null) : []
+    const dataEct1 = allData ? allData.map((item) => item.stearing ? item.stearing : null) : []
 
     const dataX: ChartData<'line'> = {
         labels,
         datasets: [
             {
-                label: 'Motor 1 Current',
-                data: motor1,
-                backgroundColor: "rgba(255, 0, 162, 0.2)",
-                borderColor: "rgba(255, 0, 162, 1)"
-            }, {
-                label: 'Motor 2 Current',
-                data: motor2,
-                backgroundColor: "rgba(115, 125, 137, 0.2)",
-                borderColor: "rgba(115, 125, 137, 1)"
-            }, {
-                label: 'Motor 3 Current',
-                data: motor3,
-                backgroundColor: "rgba(254, 188, 18, 0.2)",
-                borderColor: "rgba(254, 188, 18, 1)"
-            },
+                label: 'Stearing',
+                data: dataEct1,
+                backgroundColor: "rgba(255, 189, 0, 0.2)",
+                borderColor: "rgba(255, 189, 0, 1)"
+            }
         ]
     };
 
@@ -156,4 +144,4 @@ const Motor123CurrentGraph = (props: Props) => {
     )
 }
 
-export default Motor123CurrentGraph
+export default StearingGraph

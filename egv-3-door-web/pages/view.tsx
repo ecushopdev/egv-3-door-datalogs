@@ -1,19 +1,21 @@
 import { useCallback, useEffect, useRef, useState } from "react";
 import { useWebSocket } from "react-use-websocket/dist/lib/use-websocket";
 import { typeEgvSenderData } from '../src/util/type/TypeEgvData';
-import { Container } from "@mui/system";
-import { Box, Button, Grid, Slider, TextField } from "@mui/material";
+import { Box, Grid, Paper } from "@mui/material";
 import { ButtonCommand } from "../src/components/Button";
 import { protocolReceive, urlReceive } from "../src/shared/contstant/WsURL";
 import React from 'react';
 import ViewGraph from '../src/components/ViewGraph';
-import SocGraph from "../src/components/NameGraph/SocGraph";
-import RangeToGoGraph from "../src/components/NameGraph/RangeToGoGraph";
-import SpeedGraph from "../src/components/NameGraph/SpeedGraph";
-import { generateArrayData } from "../src/util/generate";
+import SocGraph from "../src/components/NameGraph/Soc";
+import RangeToGoGraph from "../src/components/NameGraph/RangeToGo";
+import SpeedGraph from "../src/components/NameGraph/Speed";
 import Motor123RPM from "../src/components/NameGraph/Motor123RPM";
 import Motor123Current from "../src/components/NameGraph/Motor123Current";
 import Motor123Volt from "../src/components/NameGraph/Motor123Volt";
+import AppPaper from "../src/modules/Paper/AppPaper";
+import AcpGraph from "../src/components/NameGraph/Acp";
+import EctGraph from '../src/components/NameGraph/Ect';
+import StearingGraph from "../src/components/NameGraph/Stearing";
 
 const view = () => {
     const didUnmount = useRef(false);
@@ -44,11 +46,10 @@ const view = () => {
         })
     }), [])
 
-    const startData = generateArrayData(200)
 
     const [inputData, setInputData] = useState<typeEgvSenderData[]>([])
-    const [resiveData, setResiveData] = useState<typeEgvSenderData | null>(null)
 
+    const [resiveData, setResiveData] = useState<typeEgvSenderData | null>(null)
 
 
     const processChart = useCallback(async (data: typeEgvSenderData) => {
@@ -88,6 +89,53 @@ const view = () => {
 
     return (
         <>
+            <Grid container spacing={3} sx={{ pl: 5, pr: 5, mt: 5 }} >
+                <Grid item xs={12} md={12} lg={6} xl={4}>
+                    <AppPaper>
+                        <SocGraph data={resiveData} clear={false} />
+                    </AppPaper>
+                </Grid>
+                <Grid item xs={12} md={12} lg={6} xl={4}>
+                    <AppPaper>
+                        <RangeToGoGraph data={resiveData} clear={false} />
+                    </AppPaper>
+                </Grid>
+                <Grid item xs={12} md={12} lg={6} xl={4}>
+                    <AppPaper>
+                        <SpeedGraph data={resiveData} clear={false} />
+                    </AppPaper>
+                </Grid>
+                <Grid item xs={12} md={12} lg={6} xl={4}>
+                    <AppPaper>
+                        <Motor123RPM data={resiveData} clear={false} />
+                    </AppPaper>
+                </Grid>
+                <Grid item xs={12} md={12} lg={6} xl={4}>
+                    <AppPaper>
+                        <Motor123Volt data={resiveData} clear={false} />
+                    </AppPaper>
+                </Grid>
+                <Grid item xs={12} md={12} lg={6} xl={4}>
+                    <AppPaper>
+                        <Motor123Current data={resiveData} clear={false} />
+                    </AppPaper>
+                </Grid>
+                <Grid item xs={12} md={12} lg={6} xl={4}>
+                    <AppPaper>
+                        <AcpGraph data={resiveData} clear={false} />
+                    </AppPaper>
+                </Grid>
+                <Grid item xs={12} md={12} lg={6} xl={4}>
+                    <AppPaper>
+                        <EctGraph data={resiveData} clear={false} />
+                    </AppPaper>
+                </Grid>
+                <Grid item xs={12} md={12} lg={6} xl={4}>
+                    <AppPaper>
+                        <StearingGraph data={resiveData} clear={false} />
+                    </AppPaper>
+                </Grid>
+            </Grid>
             <Grid container spacing={1} sx={{ pl: 5, pr: 5, mt: 5 }} >
                 <Grid item xs={3}>
                     <ButtonCommand command={clear} name={'clear'} />
@@ -95,29 +143,6 @@ const view = () => {
                 <Grid item xs={3}>
                     <ButtonCommand command={view} name={'view'} />
                 </Grid>
-            </Grid>
-            <Grid container spacing={1} sx={{ pl: 5, pr: 5, mt: 5 }} >
-                <Grid item xs={12} md={4}>
-                    <Box>
-                        <SocGraph data={resiveData} clear={false} />
-                    </Box>
-                </Grid>
-                <Grid item xs={12} md={4}>
-                    <RangeToGoGraph data={resiveData} clear={false} />
-                </Grid>
-                <Grid item xs={12} md={4}>
-                    <SpeedGraph data={resiveData} clear={false} />
-                </Grid>
-                <Grid item xs={12} md={4}>
-                    <Motor123RPM data={resiveData} clear={false} />
-                </Grid>
-                <Grid item xs={12} md={4}>
-                    <Motor123Volt data={resiveData} clear={false} />
-                </Grid>
-                <Grid item xs={12} md={4}>
-                    <Motor123Current data={resiveData} clear={false} />
-                </Grid>
-
             </Grid>
         </>
     )

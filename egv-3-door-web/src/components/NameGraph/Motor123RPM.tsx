@@ -37,7 +37,7 @@ interface Props {
     clear: boolean
 }
 
-const Motor123RPM = (props: Props) => {
+const Motor123RPMGraph = (props: Props) => {
     const { data } = props
     const theme = useTheme();
 
@@ -119,7 +119,7 @@ const Motor123RPM = (props: Props) => {
                     color: theme.palette.divider,
                 },
                 suggestedMin: 0,
-                suggestedMax: 100,
+                suggestedMax: 10000,
                 ticks: {
                     maxTicksLimit: 5,
                 },
@@ -156,4 +156,4 @@ const Motor123RPM = (props: Props) => {
     )
 }
 
-export default Motor123RPM
+export default Motor123RPMGraph

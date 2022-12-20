@@ -49,7 +49,7 @@ const RangeToGoGraph = (props: Props) => {
         labels,
         datasets: [
             {
-                label: 'RangeToGo',
+                label: 'Range To Go',
                 data: datas,
                 fill: true,
                 backgroundColor: "rgba(75,192,192,0.2)",

@@ -10,7 +10,7 @@ import {
     Legend,
     TimeScale,
     ChartOptions,
-    ChartData,
+    // ChartData,
 } from 'chart.js';
 import { Line } from 'react-chartjs-2';
 import { Button, Grid, ButtonProps } from '@mui/material';

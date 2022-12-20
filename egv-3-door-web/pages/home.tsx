@@ -3,7 +3,7 @@ import React, { useCallback, useEffect, useRef, useState } from 'react'
 import useWebSocket from 'react-use-websocket';
 import { ButtonCommand, ButtonMenu } from '../src/components/Button';
 import { protocolSend, urlSend } from '../src/shared/contstant/WsURL';
-import { generateData } from '../src/util/generate'
+import { generateData } from '../src/util/generateSendData'
 import { typeEgvSender } from '../src/util/type/TypeEgvData';
 import { speedTimeSend } from '../src/shared/contstant/LimitData';
 

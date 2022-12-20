@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import {
     Chart as ChartJS,
     CategoryScale,
@@ -13,13 +13,12 @@ import {
     ChartData,
 } from 'chart.js';
 import { Line } from 'react-chartjs-2';
-import { Button, Grid, ButtonProps } from '@mui/material';
 import { useTheme } from '@mui/material';
-import dayjs from 'dayjs';
 
 import 'chartjs-adapter-dayjs-3';
 import { typeEgvSenderData } from '../../util/type/TypeEgvData';
 import { limitDataChart } from '../../shared/contstant/LimitData';
+import { generateArrayReceivedData } from '../../util/generateReceivedData';
 
 ChartJS.register(
     CategoryScale,
@@ -40,7 +39,9 @@ const SocGraph = (props: Props) => {
     const { data } = props
     const theme = useTheme();
 
-    const [allData, setAllData] = useState<typeEgvSenderData[] | null>(null)
+    const startData = generateArrayReceivedData(200)
+
+    const [allData, setAllData] = useState<typeEgvSenderData[] | null>([])
 
     const labels = allData ? allData.map((item) => item.timestamp) : []
     const datas = allData ? allData.map((item) => item.soc ? item.soc : null) : []
