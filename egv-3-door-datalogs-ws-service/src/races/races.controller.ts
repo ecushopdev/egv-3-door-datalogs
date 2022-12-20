@@ -52,7 +52,7 @@ export class RacesController {
       startTimestamp: dayjs().toDate(),
     };
     const response = await this.racesService.create(createRaceDto);
-    this.wsGateway.broadcast('Status', response);
+    this.wsGateway.broadcastStatus(response);
     return response;
   }
 
@@ -98,7 +98,7 @@ export class RacesController {
       };
     }
     const response = await this.racesService.update(id, data);
-    this.wsGateway.broadcast('Status', response);
+    this.wsGateway.broadcastStatus(response);
     return response;
   }
 

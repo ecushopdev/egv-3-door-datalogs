@@ -180,11 +180,14 @@ export class WsAdapter extends AbstractWsAdapter {
       for (const wsServer of wsServersCollection) {
         const pathPattern = new UrlPattern('/egv-datalog');
         const pathPatternMonitor = new UrlPattern('/egv-datalog-monitor');
+        const pathPatternStatus = new UrlPattern('/egv-datalog-status');
         const matchPattern = pathPattern.match(pathname);
         const matchPatternMonitor = pathPatternMonitor.match(pathname);
+        const matchPatternStatus = pathPatternStatus.match(pathname);
         if (
           (matchPattern !== null && protocol === 'egv-sender') ||
-          (matchPatternMonitor !== null && protocol === 'egv-monitor')
+          (matchPatternMonitor !== null && protocol === 'egv-monitor') ||
+          (matchPatternStatus !== null && protocol === 'egv-status')
         ) {
           request.headers = { ...request.headers, pathParams: matchPattern };
           wsServer.handleUpgrade(request, socket, head, function done(ws) {

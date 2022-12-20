@@ -26,7 +26,7 @@ export const createNestServer = async (expressInstance: express.Express) => {
   app.setGlobalPrefix('egv/api/v1');
 
   app.use(
-    ['/api/v1/docs/'],
+    ['/egv/api/v1/docs/'],
     basicAuth({
       challenge: true,
       users: {
