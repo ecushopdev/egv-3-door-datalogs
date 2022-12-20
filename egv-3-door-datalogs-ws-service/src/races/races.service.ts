@@ -45,16 +45,27 @@ export class RacesService {
       {
         $lookup: {
           from: 'DataLogs',
-          localField: 'race',
-          foreignField: '_id',
+          localField: '_id',
+          foreignField: 'race',
           as: 'dataLogs',
+        },
+      },
+      {
+        $addFields: {
+          id: '$_id',
+        },
+      },
+      {
+        $project: {
+          _id: 0,
+          'dataLogs._id': 0,
+          'dataLogs.race': 0,
+          'dataLogs.createdAt': 0,
         },
       },
     ];
     const response = await this.racesModel.aggregate(pipeline).exec();
     if (!response[0]) return null;
-    response[0].id = response[0]._id;
-    delete response[0]._id;
     return response[0];
   }
 

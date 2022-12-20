@@ -1,0 +1,61 @@
+<html>
+<head>
+  <script>
+  async function postData(url = '', data = {}) {
+    // Default options are marked with *
+    const response = await fetch(url, {
+      method: 'POST', // *GET, POST, PUT, DELETE, etc.
+      mode: 'cors', // no-cors, *cors, same-origin
+      cache: 'no-cache', // *default, no-cache, reload, force-cache, only-if-cached
+      credentials: 'same-origin', // include, *same-origin, omit
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      redirect: 'follow', // manual, *follow, error
+      referrerPolicy: 'no-referrer', // no-referrer, *no-referrer-when-downgrade, origin, origin-when-cross-origin, same-origin, strict-origin, strict-origin-when-cross-origin, unsafe-url
+      body: JSON.stringify(data) // body data type must match "Content-Type" header
+    });
+    return response.json(); // parses JSON response into native JavaScript objects
+  }
+  const id = "63a112e8b7ac77b16877be95"
+  const data = new Array(20).fill(20).map((item) => {
+    return {
+      soc: 0,
+      rangeToGo: 0,
+      speed: 0,
+      voltBatt: 0,
+      motor1RPM: 0,
+      motor1Volt: 0,
+      motor1Current: 0,
+      motor1Torque: 0,
+      motor2RPM: 0,
+      motor2Volt: 0,
+      motor2Current: 0,
+      motor2Torque: 0,
+      motor3RPM: 0,
+      motor3Volt: 0,
+      motor3Current: 0,
+      motor3Torque: 0,
+      acpMain: 0,
+      acpSub: 0,
+      ect1: 0,
+      ect2: 0,
+      stearing: 0,
+      breakPos: 0,
+      gearPos: 0,
+      aBatt: 0,
+      errorMotor1: false,
+      errorMotor2: false,
+      errorMotor3: false,
+      timestamp: new Date(),
+    }
+  })
+  postData(`http://localhost:4000/egv/api/v1/races/${id}/datalogs`, data)
+    .then((data) => {
+      console.log(data); // JSON data parsed by `data.json()` call
+    });
+  </script>
+</head>
+
+<body></body>
+</html>

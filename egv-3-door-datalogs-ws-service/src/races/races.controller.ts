@@ -34,6 +34,7 @@ import { CreateDatalogDto } from '../datalogs/dto/create-datalog.dto';
 import { NotFoundErrorEntity } from '../common/entities/not-found-error.entity';
 import { DataLogsService } from '../datalogs/datalogs.service';
 import { BadRequestErrorEntity } from '../common/entities/bad-request-error.entity';
+import { RaceOneEntity } from './entities/race-one.entity';
 
 @Controller('races')
 @ApiTags('Races')
@@ -62,7 +63,7 @@ export class RacesController {
   }
 
   @Get(':id')
-  @ApiOkResponse({ type: RaceEntity })
+  @ApiOkResponse({ type: RaceOneEntity })
   @ApiNotFoundResponse({ type: NotFoundErrorEntity })
   async findOne(@Param('id', new ParseObjectIdPipe()) id: string) {
     const response = await this.racesService.findOneAggregation(id);

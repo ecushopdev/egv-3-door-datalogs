@@ -4,6 +4,7 @@ import { ApiOkResponse, ApiQuery, ApiTags } from '@nestjs/swagger';
 import { DatalogsEntity } from './entities/datalogs.entity';
 import { FilterQuery } from 'mongoose';
 import { DataLogs } from './schema/datalogs.schema';
+import { ObjectId } from 'mongodb';
 
 @Controller('datalogs')
 @ApiTags('DataLogs')
@@ -31,13 +32,24 @@ export class DataLogsController {
     @Query()
     { timestampBegin, timestampEnd, race },
   ) {
-    const filter: FilterQuery<DataLogs> = {
-      race: race ? race : undefined,
-      timestamp: {
-        $lte: timestampBegin ? timestampBegin : undefined,
-        $gte: timestampEnd ? timestampEnd : undefined,
-      },
-    };
+    let filter: FilterQuery<DataLogs>;
+
+    if (race) {
+      filter = {
+        race: race ? new ObjectId(race) : undefined,
+      };
+    }
+
+    if (timestampBegin && timestampEnd) {
+      filter = {
+        ...filter,
+        timestamp: {
+          $lte: timestampBegin ? timestampBegin : undefined,
+          $gte: timestampEnd ? timestampEnd : undefined,
+        },
+      };
+    }
+
     return this.datalogsService.findAll({ filter });
   }
 }

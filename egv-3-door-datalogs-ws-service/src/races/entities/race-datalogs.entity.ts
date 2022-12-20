@@ -1,10 +1,6 @@
-import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
+import { ApiProperty } from '@nestjs/swagger';
 
-export class DatalogsEntity {
-  @ApiProperty({ type: String })
-  id: string;
-  @ApiPropertyOptional({ type: String })
-  race: string;
+export class RaceDatalogsEntity {
   @ApiProperty({ type: Number })
   soc: number;
   @ApiProperty({ type: Number })
@@ -61,6 +57,4 @@ export class DatalogsEntity {
   errorMotor3: boolean;
   @ApiProperty({ type: Date })
   timestamp: Date;
-  @ApiProperty({ type: Date })
-  createdAt: Date;
 }
