@@ -52,8 +52,8 @@ const generateData = (): typeEgvSender => {
             motor3Volt,             //Chart Volt
             motor3Current,              //Chart Current
             motor3Torque,                   //Chart Torque
-            acpMain,
-            acpSub,
+            acpMain,                //Chart acp                
+            acpSub,                 //Chart acp            
             ect1,               //Chart etc               
             ect2,               //Chart etc
             stearing,

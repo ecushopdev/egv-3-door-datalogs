@@ -13,7 +13,7 @@ import {
     ChartData,
 } from 'chart.js';
 import { Line } from 'react-chartjs-2';
-import { Button, Grid, ButtonProps, Typography } from '@mui/material';
+import { Button, Grid, ButtonProps } from '@mui/material';
 import { useTheme } from '@mui/material';
 import dayjs from 'dayjs';
 
@@ -31,30 +31,42 @@ ChartJS.register(
     Legend,
     TimeScale
 );
+
 interface Props {
     data?: typeEgvSenderData | null
     clear: boolean
 }
 
-const SpeedGraph = (props: Props) => {
+const Motor123Volt = (props: Props) => {
     const { data } = props
     const theme = useTheme();
 
     const [allData, setAllData] = useState<typeEgvSenderData[] | null>(null)
 
     const labels = allData ? allData.map((item) => item.timestamp) : []
-    const datas = allData ? allData.map((item) => item.speed ? item.speed : null) : []
+    const motor1 = allData ? allData.map((item) => item.motor1Volt ? item.motor1Volt : null) : []
+    const motor2 = allData ? allData.map((item) => item.motor2Volt ? item.motor2Volt : null) : []
+    const motor3 = allData ? allData.map((item) => item.motor3Volt ? item.motor3Volt : null) : []
 
     const dataX: ChartData<'line'> = {
         labels,
         datasets: [
             {
-                label: 'Speed',
-                data: datas,
-                fill: true,
-                backgroundColor: "rgba(0, 125, 255, 0.2)",
-                borderColor: "rgba(0, 125, 255, 1)"
-            }
+                label: 'Motor 1 Volt',
+                data: motor1,
+                backgroundColor: "rgba(77, 77, 77, 0.2)",
+                borderColor: "rgba(77, 77, 77, 1)"
+            }, {
+                label: 'Motor 2 Volt',
+                data: motor2,
+                backgroundColor: "rgba(220, 109, 109, 0.2)",
+                borderColor: "rgba(220, 109, 109, 1)"
+            }, {
+                label: 'Motor 3 Volt',
+                data: motor3,
+                backgroundColor: "rgba(102, 103, 247, 0.2)",
+                borderColor: "rgba(102, 103, 247, 1)"
+            },
         ]
     };
 
@@ -144,4 +156,4 @@ const SpeedGraph = (props: Props) => {
     )
 }
 
-export default SpeedGraph
+export default Motor123Volt

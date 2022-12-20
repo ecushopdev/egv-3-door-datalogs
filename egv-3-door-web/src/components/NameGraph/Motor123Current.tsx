@@ -13,7 +13,7 @@ import {
     ChartData,
 } from 'chart.js';
 import { Line } from 'react-chartjs-2';
-import { Button, Grid, ButtonProps, Typography } from '@mui/material';
+import { Button, Grid, ButtonProps } from '@mui/material';
 import { useTheme } from '@mui/material';
 import dayjs from 'dayjs';
 
@@ -31,30 +31,42 @@ ChartJS.register(
     Legend,
     TimeScale
 );
+
 interface Props {
     data?: typeEgvSenderData | null
     clear: boolean
 }
 
-const SpeedGraph = (props: Props) => {
+const Motor123Current = (props: Props) => {
     const { data } = props
     const theme = useTheme();
 
     const [allData, setAllData] = useState<typeEgvSenderData[] | null>(null)
 
     const labels = allData ? allData.map((item) => item.timestamp) : []
-    const datas = allData ? allData.map((item) => item.speed ? item.speed : null) : []
+    const motor1 = allData ? allData.map((item) => item.motor1Current ? item.motor1Current : null) : []
+    const motor2 = allData ? allData.map((item) => item.motor2Current ? item.motor2Current : null) : []
+    const motor3 = allData ? allData.map((item) => item.motor3Current ? item.motor3Current : null) : []
 
     const dataX: ChartData<'line'> = {
         labels,
         datasets: [
             {
-                label: 'Speed',
-                data: datas,
-                fill: true,
-                backgroundColor: "rgba(0, 125, 255, 0.2)",
-                borderColor: "rgba(0, 125, 255, 1)"
-            }
+                label: 'Motor 1 Current',
+                data: motor1,
+                backgroundColor: "rgba(255, 0, 162, 0.2)",
+                borderColor: "rgba(255, 0, 162, 1)"
+            }, {
+                label: 'Motor 2 Current',
+                data: motor2,
+                backgroundColor: "rgba(115, 125, 137, 0.2)",
+                borderColor: "rgba(115, 125, 137, 1)"
+            }, {
+                label: 'Motor 3 Current',
+                data: motor3,
+                backgroundColor: "rgba(254, 188, 18, 0.2)",
+                borderColor: "rgba(254, 188, 18, 1)"
+            },
         ]
     };
 
@@ -144,4 +156,4 @@ const SpeedGraph = (props: Props) => {
     )
 }
 
-export default SpeedGraph
+export default Motor123Current

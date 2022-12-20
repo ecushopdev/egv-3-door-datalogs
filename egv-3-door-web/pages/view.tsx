@@ -11,6 +11,9 @@ import SocGraph from "../src/components/NameGraph/SocGraph";
 import RangeToGoGraph from "../src/components/NameGraph/RangeToGoGraph";
 import SpeedGraph from "../src/components/NameGraph/SpeedGraph";
 import { generateArrayData } from "../src/util/generate";
+import Motor123RPM from "../src/components/NameGraph/Motor123RPM";
+import Motor123Current from "../src/components/NameGraph/Motor123Current";
+import Motor123Volt from "../src/components/NameGraph/Motor123Volt";
 
 const view = () => {
     const didUnmount = useRef(false);
@@ -105,6 +108,16 @@ const view = () => {
                 <Grid item xs={12} md={4}>
                     <SpeedGraph data={resiveData} clear={false} />
                 </Grid>
+                <Grid item xs={12} md={4}>
+                    <Motor123RPM data={resiveData} clear={false} />
+                </Grid>
+                <Grid item xs={12} md={4}>
+                    <Motor123Volt data={resiveData} clear={false} />
+                </Grid>
+                <Grid item xs={12} md={4}>
+                    <Motor123Current data={resiveData} clear={false} />
+                </Grid>
+
             </Grid>
         </>
     )

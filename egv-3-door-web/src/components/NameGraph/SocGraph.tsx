@@ -52,8 +52,8 @@ const SocGraph = (props: Props) => {
                 label: 'SOC',
                 data: datas,
                 fill: true,
-                backgroundColor: "rgba(75,192,192,0.2)",
-                borderColor: "rgba(75,192,192,1)"
+                backgroundColor: "rgba(255, 215, 0, 0.2)",
+                borderColor: "rgba(255, 215, 0, 1)"
             }
         ]
     };
