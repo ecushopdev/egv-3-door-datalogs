@@ -10,6 +10,10 @@ export class CreateDatalogDto {
   @ApiProperty({ type: Number })
   speed: number;
   @ApiProperty({ type: Number })
+  lat: number;
+  @ApiProperty({ type: Number })
+  lng: number;
+  @ApiProperty({ type: Number })
   voltBatt: number;
   @ApiProperty({ type: Number })
   motor1RPM: number;
