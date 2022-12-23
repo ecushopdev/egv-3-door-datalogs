@@ -29,6 +29,10 @@ export class DataLogs {
   @Prop()
   speed: number;
   @Prop()
+  lat: number;
+  @Prop()
+  lng: number;
+  @Prop()
   voltBatt: number;
   @Prop()
   motor1RPM: number;
