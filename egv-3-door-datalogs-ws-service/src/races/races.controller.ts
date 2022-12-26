@@ -5,11 +5,14 @@ import {
   Delete,
   Get,
   HttpStatus,
+  InternalServerErrorException,
   NotFoundException,
   Param,
   Patch,
   Post,
   Res,
+  UploadedFile,
+  UseInterceptors,
 } from '@nestjs/common';
 import { RacesService } from './races.service';
 import { CreateRaceDto } from './dto/create-race.dto';
@@ -17,6 +20,7 @@ import { UpdateRaceDto } from './dto/update-race.dto';
 import {
   ApiBadRequestResponse,
   ApiBody,
+  ApiConsumes,
   ApiCreatedResponse,
   ApiNoContentResponse,
   ApiNotFoundResponse,
@@ -35,6 +39,10 @@ import { NotFoundErrorEntity } from '../common/entities/not-found-error.entity';
 import { DataLogsService } from '../datalogs/datalogs.service';
 import { BadRequestErrorEntity } from '../common/entities/bad-request-error.entity';
 import { RaceOneEntity } from './entities/race-one.entity';
+import { FileInterceptor } from '@nestjs/platform-express';
+import { VideoValidatePipe } from '../common/pipe/video-validate.pipe';
+import { S3 } from 'aws-sdk';
+import { UploadService } from '../upload/upload.service';
 
 @Controller('races')
 @ApiTags('Races')
@@ -42,6 +50,7 @@ export class RacesController {
   constructor(
     private readonly racesService: RacesService,
     private readonly datalogsService: DataLogsService,
+    private readonly uploadService: UploadService,
     private readonly wsGateway: WsGateway,
   ) {}
 
@@ -135,5 +144,60 @@ export class RacesController {
     }));
     await this.datalogsService.createMany(data);
     return res.status(HttpStatus.NO_CONTENT).send();
+  }
+
+  @Post(':id/video')
+  @UseInterceptors(FileInterceptor('file'))
+  @ApiConsumes('multipart/form-data')
+  @ApiBody({
+    schema: {
+      type: 'object',
+      properties: {
+        file: {
+          type: 'string',
+          format: 'binary',
+        },
+      },
+    },
+  })
+  @ApiNoContentResponse()
+  async uploadVideo(
+    @UploadedFile(new VideoValidatePipe()) file: Express.Multer.File,
+    @Param('id') id: string,
+    @Res() res: Response,
+  ) {
+    try {
+      const params: S3.Types.PutObjectRequest = {
+        Bucket: process.env.S3_BUCKET,
+        Key: `videos/${file.originalname}`,
+        Body: Buffer.from(file.buffer.toString('base64'), 'base64'),
+        ContentEncoding: 'base64',
+        ContentType: file.mimetype,
+        Metadata: {
+          videoId: id,
+        },
+      };
+      await this.uploadService.uploadFile(params);
+      return res.status(HttpStatus.NO_CONTENT).send();
+    } catch (e: any) {
+      throw new InternalServerErrorException(e.message);
+    }
+  }
+
+  @Get(':id/video')
+  async getVideo(@Param('id') id: string, @Res() res: Response) {
+    try {
+      const result: any = await this.uploadService.getFile({
+        Bucket: process.env.S3_BUCKET,
+        Key: `videos/${id}.mp4`,
+      });
+      res.writeHead(200, {
+        'Content-Type': result.ContentType,
+        'Cross-Origin-Resource-Policy': 'no-cors',
+      });
+      res.end(result.Body);
+    } catch (e: any) {
+      throw new InternalServerErrorException(e.message);
+    }
   }
 }
