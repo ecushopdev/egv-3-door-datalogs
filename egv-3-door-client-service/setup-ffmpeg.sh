@@ -17,6 +17,8 @@
 
 #Pi Stream mpeg Buffer
 #sudo ffmpeg -y -r 30 -i "/dev/video2" -c:v libx264 -c:a aac -strict -2 -f mpeg -
+#Pi Record
+#sudo ffmpeg -y -r 30 -i "/dev/video0" -c:v libx264 -movflags faststart ./output/videos.mp4
 
 #Cut Video
 #ffmpeg -ss 00:00:00.0 -t 00:00:10.0 -i ./output/videos.mp4 ./output/videos2.mp4

@@ -6,6 +6,7 @@ import FormData from 'form-data';
 import * as fs from 'fs';
 import axios from 'axios';
 import sleep from './utils/sleep';
+import https from 'https';
 
 dotenv.config();
 
@@ -13,14 +14,26 @@ const app = express();
 
 const client = new WebSocketClient();
 
-let connectSchedule: NodeJS.Timer;
+let reconnectSchedule: NodeJS.Timer | undefined;
 
 const wsClientConnect = () => {
+  console.log('Connect websocket');
   client.connect(process.env.WS_URL!, process.env.WS_PROTOCAL!);
 };
 
+const wsClientReConnect = () => {
+  if (!reconnectSchedule) {
+    reconnectSchedule = setInterval(() => {
+      console.log('Reconnect websocket');
+      client.connect(process.env.WS_URL!, process.env.WS_PROTOCAL!);
+    }, 1000);
+  }
+};
+
 const uploadVideoLog = async (id: string) => {
-  await sleep();
+  await sleep(5000);
+  console.log(`Upload Video: ${id}`);
+  console.time('Uploaded');
   const form = new FormData();
   form.append('file', fs.createReadStream(`./output/${id}.mp4`));
   const url = `${process.env.API_URL}/egv/api/v1/races/${id}/video`;
@@ -28,58 +41,88 @@ const uploadVideoLog = async (id: string) => {
     headers: {
       ...form.getHeaders(),
     },
+    httpsAgent: new https.Agent({ rejectUnauthorized: false }),
   });
+  console.timeEnd('Uploaded');
 };
 
 client.on('connectFailed', function (error) {
   console.log('Connect Error: ' + error.toString());
-  if (!connectSchedule) {
-    connectSchedule = setInterval(wsClientConnect, 1000);
-  }
+  wsClientReConnect();
 });
 
 client.on('connect', function (connection) {
   console.log('WebSocket Client Connected');
 
   if (connection.connected) {
-    if (connectSchedule) clearInterval(connectSchedule);
-    let ffmpeg: ChildProcessWithoutNullStreams;
-    let timeout: NodeJS.Timeout;
+    if (reconnectSchedule) {
+      clearInterval(reconnectSchedule);
+      reconnectSchedule = undefined;
+    }
+    let ffmpeg: ChildProcessWithoutNullStreams | undefined;
+    let timeout: NodeJS.Timeout | undefined;
 
     connection.on('error', function (error) {
       console.log('Connection Error: ' + error.toString());
-      if (ffmpeg) ffmpeg.kill();
-      if (timeout) clearTimeout(timeout);
-      if (!connectSchedule) {
-        connectSchedule = setInterval(wsClientConnect, 1000);
+      if (ffmpeg) {
+        ffmpeg.kill();
+        ffmpeg = undefined;
       }
+      if (timeout) {
+        clearTimeout(timeout);
+        timeout = undefined;
+      }
+      wsClientReConnect();
     });
+
     connection.on('close', function () {
       console.log('echo-protocol Connection Closed');
-      if (ffmpeg) ffmpeg.kill();
-      if (timeout) clearTimeout(timeout);
-      if (!connectSchedule) {
-        connectSchedule = setInterval(wsClientConnect, 1000);
+      if (ffmpeg) {
+        ffmpeg.kill();
+        ffmpeg = undefined;
       }
+      if (timeout) {
+        clearTimeout(timeout);
+        timeout = undefined;
+      }
+      wsClientReConnect();
     });
 
     connection.on('message', async function (message) {
       if (message.type === 'utf8') {
         const { id, status } = JSON.parse(message.utf8Data);
         if (status === 'Ready') {
-          if (ffmpeg) ffmpeg.kill();
-          timeout = setTimeout(async () => {
+          if (ffmpeg) {
             ffmpeg.kill();
+            ffmpeg = undefined;
+          }
+          timeout = setTimeout(async () => {
+            if (ffmpeg) {
+              ffmpeg.kill();
+              ffmpeg = undefined;
+            }
             await uploadVideoLog(id);
           }, parseInt(process.env.LOG_VIDEO_TIMEOUT!));
+          // ffmpeg = spawn('ffmpeg', [
+          //   '-y',
+          //   '-f',
+          //   'avfoundation',
+          //   '-r',
+          //   '30',
+          //   '-i',
+          //   '0',
+          //   '-c:v',
+          //   'libx264',
+          //   '-movflags',
+          //   'faststart',
+          //   `./output/${id}.mp4`,
+          // ]);
           ffmpeg = spawn('ffmpeg', [
             '-y',
-            '-f',
-            'avfoundation',
             '-r',
             '30',
             '-i',
-            '0',
+            '/dev/video0',
             '-c:v',
             'libx264',
             '-movflags',
@@ -93,7 +136,11 @@ client.on('connect', function (connection) {
         if (status === 'Finish' || status === 'Failed') {
           if (ffmpeg) {
             ffmpeg.kill();
-            if (timeout) clearTimeout(timeout);
+            ffmpeg = undefined;
+            if (timeout) {
+              clearTimeout(timeout);
+              timeout = undefined;
+            }
             await uploadVideoLog(id);
           }
         }
