@@ -18,4 +18,6 @@ export class RaceOneEntity {
 
   @ApiPropertyOptional({ type: RaceDatalogsEntity, isArray: true })
   datalogs: RaceDatalogsEntity[] = undefined;
+  @ApiPropertyOptional({ type: String })
+  videoUrl?: string = undefined;
 }

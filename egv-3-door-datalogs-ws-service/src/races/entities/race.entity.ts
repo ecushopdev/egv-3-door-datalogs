@@ -14,4 +14,6 @@ export class RaceEntity {
 
   @ApiPropertyOptional({ type: Date })
   stopTimestamp?: Date = undefined;
+  @ApiPropertyOptional({ type: String })
+  videoUrl?: string = undefined;
 }

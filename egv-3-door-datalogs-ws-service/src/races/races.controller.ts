@@ -178,6 +178,9 @@ export class RacesController {
         },
       };
       await this.uploadService.uploadFile(params);
+      await this.racesService.update(id, {
+        videoUrl: `/egv/api/v1/races/${id}/video`,
+      });
       return res.status(HttpStatus.NO_CONTENT).send();
     } catch (e: any) {
       throw new InternalServerErrorException(e.message);

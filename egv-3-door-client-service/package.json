@@ -20,8 +20,10 @@
   },
   "dependencies": {
     "@ffmpeg-installer/ffmpeg": "^1.1.0",
+    "axios": "^1.2.1",
     "dotenv": "^16.0.3",
     "express": "^4.18.2",
+    "form-data": "^4.0.0",
     "websocket": "^1.0.34"
   }
 }

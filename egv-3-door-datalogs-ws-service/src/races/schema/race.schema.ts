@@ -29,6 +29,8 @@ export class Races {
   startTimestamp: Date;
   @Prop()
   stopTimestamp: Date;
+  @Prop()
+  videoUrl: string;
 }
 
 export const RaceSchema = SchemaFactory.createForClass(Races);
