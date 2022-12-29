@@ -1,4 +1,3 @@
-import React, { useCallback, useEffect, useState } from 'react'
 import {
     Chart as ChartJS,
     CategoryScale,
@@ -9,17 +8,14 @@ import {
     Tooltip,
     Legend,
     TimeScale,
-    ChartOptions,
     ChartData,
+    Point,
 } from 'chart.js';
 import { Line } from 'react-chartjs-2';
-import { Button, Grid, ButtonProps } from '@mui/material';
-import { useTheme } from '@mui/material';
+import { typePropsChartData } from '../../util/type/TypeLineChart';
+import { useRecoilValue } from 'recoil';
+import { selectAllDataChart } from '../../recoil/selectors/selector';
 import dayjs from 'dayjs';
-
-import 'chartjs-adapter-dayjs-3';
-import { typeEgvSenderData } from '../../util/type/TypeEgvData';
-import { limitDataChart } from '../../shared/contstant/LimitData';
 
 ChartJS.register(
     CategoryScale,
@@ -32,114 +28,32 @@ ChartJS.register(
     TimeScale
 );
 
-interface Props {
-    data?: typeEgvSenderData | null
-    clear: boolean
-}
+const StearingGraph = ({ options }: typePropsChartData) => {
 
-const StearingGraph = (props: Props) => {
-    const { data } = props
-    const theme = useTheme();
+    const dataGraph = useRecoilValue(selectAllDataChart)
 
-    const [allData, setAllData] = useState<typeEgvSenderData[] | null>(null)
-
-    const labels = allData ? allData.map((item) => item.timestamp) : []
-    const dataEct1 = allData ? allData.map((item) => item.stearing ? item.stearing : null) : []
+    const newData: Point[] = dataGraph ? dataGraph.map((item): Point => {
+        return {
+            x: dayjs(item.timestamp).unix() * 1000,
+            y: item.stearing ? item.stearing : NaN
+        }
+    }) : []
 
     const dataX: ChartData<'line'> = {
-        labels,
         datasets: [
             {
                 label: 'Stearing',
-                data: dataEct1,
+                borderWidth: 1, data: newData,
                 backgroundColor: "rgba(255, 189, 0, 0.2)",
                 borderColor: "rgba(255, 189, 0, 1)"
             }
         ]
     };
 
-    const options: ChartOptions<'line'> = {
-        responsive: true,
-        maintainAspectRatio: false,
-        interaction: {
-            intersect: false,
-            axis: 'x',
-        },
-        plugins: {
-            legend: {
-                display: false,
-            },
-            title: {
-                display: false,
-            },
-        },
-        elements: {
-            point: {
-                radius: 0,
-            },
-        },
-        scales: {
-            x: {
-                grid: {
-                    display: true,
-                    color: function (context) {
-                        if (context.index === 0) return theme.palette.divider;
-                        else return 'rgba(255,255,255,0)';
-                    },
-                },
-                ticks: {
-                    maxTicksLimit: 7,
-                    maxRotation: 0,
-                    minRotation: 0,
-                    align: 'start',
-                },
-                type: 'time',
-                time: {
-                    displayFormats: {
-                        quarter: 'MMM YYYY',
-                        minute: 'hh:mm',
-                    },
-                },
-            },
-            y: {
-                grid: {
-                    display: true,
-                    color: theme.palette.divider,
-                },
-                suggestedMin: 0,
-                suggestedMax: 100,
-                ticks: {
-                    maxTicksLimit: 5,
-                },
-            },
-        },
-        onHover: (event) => {
-            // console.log(event);
-        },
-    };
-
-    useEffect(() => {
-        if (data && data) {
-            if (allData === null) setAllData([data])
-            else {
-                if (allData.length < limitDataChart) {
-                    setAllData([...allData, data])
-                } else {
-                    let oldData = allData
-                    oldData.shift()
-                    oldData.push(data)
-                    setAllData(oldData)
-                }
-            }
-        }
-    }, [data])
-
     return (
         <Line
             data={dataX}
             options={options}
-        // height={250} 
-        // width={350} 
         />
     )
 }

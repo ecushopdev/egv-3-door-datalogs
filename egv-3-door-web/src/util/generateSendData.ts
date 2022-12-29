@@ -4,7 +4,6 @@ import { typeEgvSender } from "./type/TypeEgvData";
 const generateData = (): typeEgvSender => {
 
     const event = 'Datalog'
-    //Math.floor(Math.random() * 101) - 50;
     return {
         event,
         data: generateReceivedData(true)

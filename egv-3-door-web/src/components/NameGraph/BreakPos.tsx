@@ -28,24 +28,24 @@ ChartJS.register(
     TimeScale
 );
 
-const SpeedGraph = ({ options }: typePropsChartData) => {
+const BreakPosGraph = ({ options }: typePropsChartData) => {
 
     const dataGraph = useRecoilValue(selectAllDataChart)
 
     const newData: Point[] = dataGraph ? dataGraph.map((item): Point => {
         return {
             x: dayjs(item.timestamp).unix() * 1000,
-            y: item.speed ? item.speed : NaN
+            y: item.breakPos ? item.breakPos : NaN
         }
     }) : []
+
     const dataX: ChartData<'line'> = {
         datasets: [
             {
-                label: 'Speed',
+                label: 'Break Pos',
                 borderWidth: 1, data: newData,
-                fill: true,
-                backgroundColor: "rgba(0, 125, 255, 0.2)",
-                borderColor: "rgba(0, 125, 255, 1)"
+                backgroundColor: "rgba(9, 125, 66, 0.2)",
+                borderColor: "rgba(9, 125, 66, 1)"
             }
         ]
     };
@@ -58,4 +58,4 @@ const SpeedGraph = ({ options }: typePropsChartData) => {
     )
 }
 
-export default SpeedGraph
+export default BreakPosGraph

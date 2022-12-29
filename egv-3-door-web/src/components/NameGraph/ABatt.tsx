@@ -28,24 +28,25 @@ ChartJS.register(
     TimeScale
 );
 
-const SpeedGraph = ({ options }: typePropsChartData) => {
+const ABattGraph = ({ options }: typePropsChartData) => {
 
     const dataGraph = useRecoilValue(selectAllDataChart)
 
     const newData: Point[] = dataGraph ? dataGraph.map((item): Point => {
         return {
             x: dayjs(item.timestamp).unix() * 1000,
-            y: item.speed ? item.speed : NaN
+            y: item.aBatt ? item.aBatt : NaN
         }
     }) : []
+
     const dataX: ChartData<'line'> = {
         datasets: [
             {
-                label: 'Speed',
-                borderWidth: 1, data: newData,
-                fill: true,
-                backgroundColor: "rgba(0, 125, 255, 0.2)",
-                borderColor: "rgba(0, 125, 255, 1)"
+                label: 'A Batt',
+                borderWidth: 1,
+                data: newData,
+                backgroundColor: "rgba(0, 100, 255, 0.2)",
+                borderColor: "rgba(0, 100, 255, 1)"
             }
         ]
     };
@@ -58,4 +59,4 @@ const SpeedGraph = ({ options }: typePropsChartData) => {
     )
 }
 
-export default SpeedGraph
+export default ABattGraph

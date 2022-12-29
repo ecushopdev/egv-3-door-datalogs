@@ -28,3 +28,19 @@ export const headNameChart = {
     errorMotor3: "errorMotor3",
     timestamp: "timestamp",
 }
+
+export const NameChart = {
+    GraphAbatt: "GraphAbatt",
+    GraphAcp: "GraphAcp",
+    GraphBreakPos: "GraphBreakPos",
+    GraphEct: "GraphEct",
+    GraphGearPos: "GraphGearPos",
+    GraphMotor123Current: "GraphMotor123Current",
+    GraphMotor123RPM: "GraphMotor123RPM",
+    GraphMotor123Volt: "GraphMotor123Volt",
+    GraphRangeToGo: "GraphRangeToGo",
+    GraphSoc: "GraphSoc",
+    GraphSpeed: "GraphSpeed",
+    GraphStearing: "GraphStearing",
+    GraphVoltBatt: "GraphVoltBatt",
+}

@@ -1,10 +1,15 @@
 import { Button, ButtonProps, Grid } from "@mui/material";
 import React from 'react'
-import { PropsButton } from "../util/type/TypeButtonColor";
+import { PropsButton } from "../../../util/type/TypeButtonColor";
+import { blue, indigo, red } from "@mui/material/colors";
 
 interface Props {
     status: boolean
     sendCommand: (state: boolean) => void;
+}
+
+interface PropsDebug {
+    statusChange: () => void
 }
 
 const ButtonMenu = (props: Props) => {
@@ -15,7 +20,7 @@ const ButtonMenu = (props: Props) => {
         sendCommand(!status)
     }
     return (
-        <Grid item xs={4}>
+        <Grid item xs={12}>
             <Button
                 fullWidth
                 color={status ? 'warning' : 'inherit'}
@@ -29,6 +34,7 @@ const ButtonMenu = (props: Props) => {
 }
 
 const ButtonCommand = (props: PropsButton) => {
+
     const { command, name } = props
     let text: string
     let thisColor: ButtonProps['color']
@@ -39,7 +45,7 @@ const ButtonCommand = (props: PropsButton) => {
         thisColor = 'secondary'
     } else if (name === 'clear') {
         text = 'Clear Data'
-        thisColor = 'error'
+        thisColor = 'warning'
     } else if (name === 'view') {
         text = 'View Data'
         thisColor = 'info'
@@ -63,6 +69,20 @@ const ButtonCommand = (props: PropsButton) => {
     )
 }
 
+const DebugBtn = ({ statusChange }: PropsDebug) => {
+    return (
+        <Button
+            fullWidth
+            variant='contained'
+            color='inherit'
+            size='large'
+            onClick={statusChange}
+        >
+            Debug
+        </Button>
+    )
+}
+
 export {
-    ButtonMenu, ButtonCommand
+    ButtonMenu, ButtonCommand, DebugBtn
 }

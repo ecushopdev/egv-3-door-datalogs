@@ -1,104 +1,96 @@
-import { Box, Container, Grid, Button } from '@mui/material';
-import React, { useCallback, useEffect, useRef, useState } from 'react'
-import useWebSocket from 'react-use-websocket';
-import { ButtonCommand, ButtonMenu } from '../src/components/Button';
-import { protocolSend, urlSend } from '../src/shared/contstant/WsURL';
-import { generateData } from '../src/util/generateSendData'
-import { typeEgvSender } from '../src/util/type/TypeEgvData';
+import React, { useCallback, useEffect, useState } from 'react'
+import { useWebSocket } from 'react-use-websocket/dist/lib/use-websocket';
+import { generateData } from '../src/util/generateSendData';
 import { speedTimeSend } from '../src/shared/contstant/LimitData';
+import { protocolSend, urlSend } from '../src/shared/contstant/WsURL';
+import { Box, Button, Container } from '@mui/material';
+import { useRecoilState } from 'recoil';
 
 const home = () => {
-    const didUnmount = useRef(false);
-    const [state, setState] = useState<boolean>(false);
-    const [data, setData] = useState<typeEgvSender[]>([]);
+
+    const [socketUrl, setSocketUrl] = useState<string | null>(null)
 
     const [intervalState, setIntervalState] = useState<NodeJS.Timer | null>(null);
 
-    const socketUrl = urlSend
     const protocols = protocolSend
 
-    const {
-        sendMessage,
-    } = useWebSocket(socketUrl, {
+    const [status, setStatus] = useState<boolean>(false)
+
+    const { sendMessage, readyState } = useWebSocket(socketUrl, {
         protocols,
-        onOpen: () => console.log('open Socket'),
-        //Will attempt to reconnect on all close events, such as server shutting down
-        shouldReconnect: (closeEvent) => {
-            /*
-      useWebSocket will handle unmounting for you, but this is an example of a 
-      case in which you would not want it to automatically reconnect
-    */
-            return didUnmount.current === false;
-        }, reconnectAttempts: 10,
-        reconnectInterval: 3000,
-    });
-
-    const pushData = async () => {
-        let valueData = data
-        const thisData = generateData()
-        if (valueData.length < 5) {
-            console.log('process')
-            await setData([...valueData, thisData])
-        } else {
-            await setData([])
-            console.log('Reset Array Data')
-        }
-    }
-
-    const viewData = async () => {
-        await console.log(data)
-    }
-
-    const onClickChangeState = (status: boolean) => {
-        setState(status)
-    }
+        onOpen: (async () => console.log('Connect Socket ')),
+        onClose: (async () => {
+            await setSocketUrl(null)
+            await console.log('Close')
+        }),
+        shouldReconnect: (closeEvent) => true
+    })
 
     const startSendData = useCallback(() => {
         const sendMessageData = setInterval(async () => {
             const uploadData = generateData()
             await sendMessage(JSON.stringify(uploadData))
-            console.log(uploadData)
+            console.log(new Date().toISOString())
         }, speedTimeSend)
         setIntervalState(sendMessageData)
     }, [intervalState])
 
-    const stopSendData = useCallback(() => {
+    const stopSendData = useCallback(async () => {
         if (intervalState) {
-            clearInterval(intervalState)
+            await clearInterval(intervalState)
         }
     }, [intervalState])
 
-    const functionClear = async () => {
-        await setState(false)
-        await setData([])
-        await console.clear()
+    const handlerChangeStatus = async () => {
+        if (status) await setStatus(false)
+        else await setStatus(true)
+        console.log('Change Status')
     }
 
     useEffect(() => {
-        if (state) {
-            startSendData()
+        if (socketUrl === null) {
+            setSocketUrl(urlSend)
         } else {
-            stopSendData()
+            if (readyState === 1) {
+                if (status) {
+                    startSendData()
+                } else {
+                    stopSendData()
+                }
+            }
         }
-    }, [state])
+    }, [readyState, socketUrl, status])
 
     return (
-        <Grid container spacing={1} maxWidth='xs' >
-            <Grid item xs={12}>
-                <ButtonCommand command={pushData} name={'push'} />
-            </Grid>
-            <Grid item xs={12}>
-                <ButtonCommand command={viewData} name={'view'} />
-            </Grid>
-            <Grid item xs={12}>
-                <ButtonMenu sendCommand={onClickChangeState} status={state} />
-            </Grid>
-            <Grid item xs={12}>
-                <ButtonCommand command={functionClear} name={'clear'} />
-            </Grid>
-        </Grid>
+        <>
+            <Container>
+                <Box>
+                    Hello World
+                </Box>
+                <Box>
+                    {status ? (
+                        <>
+                            <Button
+                                variant='contained'
+                                onClick={handlerChangeStatus}
+                            >
+                                Stop
+                            </Button>
+                        </>
+                    ) : (
+                        <>
+                            <Button
+                                variant='contained'
+                                onClick={handlerChangeStatus}
+                            >
+                                Start
+                            </Button>
+                        </>
+                    )}
+                </Box>
+            </Container>
+        </>
     )
-    // <MenuSendData SendData={process} />
 }
 
 export default home

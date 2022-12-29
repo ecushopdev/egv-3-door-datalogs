@@ -141,8 +141,6 @@ const ViewGraph = (props: Props) => {
                 <Line
                     data={dataX}
                     options={options}
-                // height={250} 
-                // width={350} 
                 />
             </Grid>
         </>
