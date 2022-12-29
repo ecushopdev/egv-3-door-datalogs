@@ -90,8 +90,8 @@ client.on('connect', function (connection) {
 
     connection.on('message', async function (message) {
       if (message.type === 'utf8') {
-        const { id, status } = JSON.parse(message.utf8Data);
-        if (status === 'Ready') {
+        const { id, status, timeout1, timeout2 } = JSON.parse(message.utf8Data);
+        if (status === 'Created') {
           if (ffmpeg) {
             ffmpeg.kill();
             ffmpeg = undefined;
@@ -102,7 +102,7 @@ client.on('connect', function (connection) {
               ffmpeg = undefined;
             }
             await uploadVideoLog(id);
-          }, parseInt(process.env.LOG_VIDEO_TIMEOUT!));
+          }, timeout2 * 1000 || parseInt(process.env.LOG_VIDEO_TIMEOUT!));
           // ffmpeg = spawn('ffmpeg', [
           //   '-y',
           //   '-f',
@@ -134,15 +134,17 @@ client.on('connect', function (connection) {
           });
         }
         if (status === 'Finish' || status === 'Failed') {
-          if (ffmpeg) {
-            ffmpeg.kill();
-            ffmpeg = undefined;
-            if (timeout) {
-              clearTimeout(timeout);
-              timeout = undefined;
+          setTimeout(async () => {
+            if (ffmpeg) {
+              ffmpeg.kill();
+              ffmpeg = undefined;
+              if (timeout) {
+                clearTimeout(timeout);
+                timeout = undefined;
+              }
+              await uploadVideoLog(id);
             }
-            await uploadVideoLog(id);
-          }
+          }, timeout1 * 1000 || 10000);
         }
       }
     });

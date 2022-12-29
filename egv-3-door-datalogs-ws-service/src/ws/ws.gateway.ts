@@ -30,6 +30,14 @@ export class WsGateway {
       if (client.protocol === 'egv-status') {
         client.send(broadCastMessage);
       }
+      if (client.protocol === 'egv-sender') {
+        client.send(
+          JSON.stringify({
+            event: 'Status',
+            data: data,
+          }),
+        );
+      }
     });
   }
 
@@ -37,6 +45,6 @@ export class WsGateway {
   async statusNotification(@MessageBody() request: CreateDatalogDto) {
     const doc = await this.dataLogsService.create(request);
     this.broadcastMonitor(doc);
-    return { status: 'Accepted' };
+    return { event: 'Response', data: { status: 'Accepted' } };
   }
 }

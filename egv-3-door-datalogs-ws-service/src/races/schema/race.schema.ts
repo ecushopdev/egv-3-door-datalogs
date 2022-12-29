@@ -30,6 +30,10 @@ export class Races {
   @Prop()
   stopTimestamp: Date;
   @Prop()
+  timeout1: number;
+  @Prop()
+  timeout2: number;
+  @Prop()
   videoUrl: string;
 }
 

@@ -57,10 +57,12 @@ export class RacesController {
   @Post()
   @ApiCreatedResponse({ type: RaceEntity })
   async create(@Body() createRaceDto: CreateRaceDto) {
-    createRaceDto = {
+    const data = {
       startTimestamp: dayjs().toDate(),
+      timeout1: createRaceDto.timeout1,
+      timeout2: createRaceDto.timeout2,
     };
-    const response = await this.racesService.create(createRaceDto);
+    const response = await this.racesService.create(data);
     this.wsGateway.broadcastStatus(response);
     return response;
   }
