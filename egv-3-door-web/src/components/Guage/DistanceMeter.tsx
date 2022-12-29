@@ -20,7 +20,7 @@ const DistanceMeter = ({ dis, position, process }: Props) => {
                 <Box>
                     <Slider
                         size="small"
-                        defaultValue={70}
+                        defaultValue={0}
                         min={0}
                         max={402}
                         aria-label="Small"
@@ -38,10 +38,10 @@ const DistanceMeter = ({ dis, position, process }: Props) => {
                 >
                     <Box
                         sx={{
-                            width: 40,
-                            height: 40,
+                            width: 95,
+                            height: 60,
                             borderRadius: '15px',
-                            backgroundColor: 'blue',
+                            // backgroundColor: 'blue',
                             position: 'absolute',
                             top: '50%',
                             left: `${position}%`,
@@ -49,9 +49,10 @@ const DistanceMeter = ({ dis, position, process }: Props) => {
                         }}
                     >
                         <img
-                            src='/car.png'
-                            width={50}
-                            height={40}
+                            // src='/car.png'
+                            src='/vehicles.svg'
+                            width='100%'
+                            height='100%'
                         />
                     </Box>
                 </Box>

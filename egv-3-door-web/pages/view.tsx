@@ -1,7 +1,7 @@
 import { useCallback, useEffect, useState } from "react";
 import { typeEgvSenderData } from '../src/util/type/TypeEgvData';
 import { Button, Grid, useTheme } from "@mui/material";
-import { ButtonCommand, ButtonMenu } from "../src/modules/action/Button/Button";
+import { ButtonCommand, ButtonMenu } from "../src/modules/Button/Button";
 import { protocolReceive, urlReceive } from "../src/shared/contstant/WsURL";
 import React from 'react';
 import AppPaper from "../src/modules/Paper/AppPaper";
