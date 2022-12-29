@@ -5,6 +5,9 @@ import { MongooseModule } from '@nestjs/mongoose';
 import { MongooseModuleOptions } from '@nestjs/mongoose/dist/interfaces/mongoose-options.interface';
 import { DataLogsModule } from './datalogs/datalogs.module';
 import { RacesModule } from './races/races.module';
+import { UploadModule } from './upload/upload.module';
+import { S3Module } from 'nestjs-s3';
+import process from 'process';
 
 const prdOption: MongooseModuleOptions = {
   replicaSet: 'rs0',
@@ -30,9 +33,19 @@ if (process.env.NODE_ENV === 'production') {
     ConfigModule.forRoot(),
     MongooseModule.forRoot(process.env.DATABASE_URL, options),
     CacheModule.register(),
+    S3Module.forRoot({
+      config: {
+        accessKeyId: process.env.S3_ACCESS_KEY_ID,
+        secretAccessKey: process.env.S3_SECRET_ACCESS_KEY,
+        // endpoint: 'http://127.0.0.1:9000',
+        s3ForcePathStyle: true,
+        signatureVersion: 'v4',
+      },
+    }),
     WsModule,
     DataLogsModule,
     RacesModule,
+    UploadModule,
   ],
 })
 export class AppModule {}

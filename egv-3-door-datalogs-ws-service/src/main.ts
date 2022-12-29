@@ -65,6 +65,9 @@ export const createNestServer = async (expressInstance: express.Express) => {
   console.log(
     `WebSockets is running on: ${await app.getUrl()}/egv-datalog-monitor`,
   );
+  console.log(
+    `WebSockets is running on: ${await app.getUrl()}/egv-datalog-status`,
+  );
 };
 
 createNestServer(server)

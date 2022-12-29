@@ -1,0 +1,15 @@
+<html>
+<head>
+  <script>
+    const socket = new WebSocket('ws://localhost:4000/egv-datalog-status', 'egv-status');
+    socket.onopen = function() {
+      console.log('Connected');
+      socket.onmessage = function(data) {
+        console.log(data);
+      };
+    };
+  </script>
+</head>
+
+<body></body>
+</html>
