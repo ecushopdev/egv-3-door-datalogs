@@ -90,7 +90,7 @@ client.on('connect', function (connection) {
 
     connection.on('message', async function (message) {
       if (message.type === 'utf8') {
-        const { id, status, timeout1, timeout2 } = JSON.parse(message.utf8Data);
+        const { id, status } = JSON.parse(message.utf8Data);
         if (status === 'Created') {
           if (ffmpeg) {
             ffmpeg.kill();
@@ -102,49 +102,47 @@ client.on('connect', function (connection) {
               ffmpeg = undefined;
             }
             await uploadVideoLog(id);
-          }, timeout2 * 1000 || parseInt(process.env.LOG_VIDEO_TIMEOUT!));
-          // ffmpeg = spawn('ffmpeg', [
-          //   '-y',
-          //   '-f',
-          //   'avfoundation',
-          //   '-r',
-          //   '30',
-          //   '-i',
-          //   '0',
-          //   '-c:v',
-          //   'libx264',
-          //   '-movflags',
-          //   'faststart',
-          //   `./output/${id}.mp4`,
-          // ]);
+          }, parseInt(process.env.LOG_VIDEO_TIMEOUT!));
           ffmpeg = spawn('ffmpeg', [
             '-y',
+            '-f',
+            'avfoundation',
             '-r',
             '30',
             '-i',
-            '/dev/video0',
+            '0',
             '-c:v',
             'libx264',
             '-movflags',
             'faststart',
             `./output/${id}.mp4`,
           ]);
+          // ffmpeg = spawn('ffmpeg', [
+          //   '-y',
+          //   '-r',
+          //   '30',
+          //   '-i',
+          //   '/dev/video0',
+          //   '-c:v',
+          //   'libx264',
+          //   '-movflags',
+          //   'faststart',
+          //   `./output/${id}.mp4`,
+          // ]);
           ffmpeg.stderr.on('data', (data: any) => {
             console.log(data.toString());
           });
         }
         if (status === 'Finish' || status === 'Failed') {
-          setTimeout(async () => {
-            if (ffmpeg) {
-              ffmpeg.kill();
-              ffmpeg = undefined;
-              if (timeout) {
-                clearTimeout(timeout);
-                timeout = undefined;
-              }
-              await uploadVideoLog(id);
+          if (ffmpeg) {
+            ffmpeg.kill();
+            ffmpeg = undefined;
+            if (timeout) {
+              clearTimeout(timeout);
+              timeout = undefined;
             }
-          }, timeout1 * 1000 || 10000);
+            await uploadVideoLog(id);
+          }
         }
       }
     });
