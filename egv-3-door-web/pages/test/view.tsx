@@ -1,20 +1,20 @@
 import { useCallback, useEffect, useState } from "react";
-import { typeEgvSenderData } from '../src/util/type/TypeEgvData';
+import { typeEgvSenderData } from '../../src/util/type/TypeEgvData';
 import { Button, Grid, useTheme } from "@mui/material";
-import { ButtonCommand, ButtonMenu } from "../src/modules/Button/Button";
-import { protocolReceive, urlReceive } from "../src/shared/contstant/WsURL";
+import { ButtonCommand, ButtonMenu } from "../../src/modules/Button/Button";
+import { protocolReceive, urlReceive } from "../../src/shared/contstant/WsURL";
 import React from 'react';
-import AppPaper from "../src/modules/Paper/AppPaper";
-import GearPosGraph from "../src/components/NameGraph/GearPos";
+import AppPaper from "../../src/modules/Paper/AppPaper";
+import GearPosGraph from "../../src/components/NameGraph/GearPos";
 import { useWebSocket } from "react-use-websocket/dist/lib/use-websocket";
 import { ChartOptions } from "chart.js";
-import { GraphAbatt, GraphAcp, GraphBreakPos, GraphEct, GraphGearPos, GraphMotor123Current, GraphMotor123RPM, GraphMotor123Volt, GraphRangeToGo, GraphSoc, GraphSpeed, GraphStearing } from "../src/shared/DynamicSSR";
+import { GraphAbatt, GraphAcp, GraphBreakPos, GraphEct, GraphGearPos, GraphMotor123Current, GraphMotor123RPM, GraphMotor123Volt, GraphRangeToGo, GraphSoc, GraphSpeed, GraphStearing } from "../../src/shared/DynamicSSR";
 import { useRecoilState } from 'recoil';
-import { atomAllDataChart } from "../src/recoil/atom/atom";
-import TestGraph from '../src/components/NameGraph/TestGraph';
-import { limitDataChart } from "../src/shared/contstant/LimitData";
-import { fastGenerateReceivedData } from "../src/util/generateReceivedData";
-import { NameChart } from '../src/shared/contstant/ChartName';
+import { atomAllDataChart } from "../../src/recoil/atom/atom";
+import TestGraph from '../../src/components/NameGraph/TestGraph';
+import { limitDataChart } from "../../src/shared/contstant/LimitData";
+import { fastGenerateReceivedData } from "../../src/util/generateReceivedData";
+import { NameChart } from '../../src/shared/contstant/ChartName';
 
 const View = () => {
 

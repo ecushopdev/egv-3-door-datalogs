@@ -11,7 +11,7 @@ import {
     ChartData,
 } from 'chart.js';
 import { Line } from 'react-chartjs-2';
-import { typePropsChartData } from '../../util/type/TypeLineChart';
+import { typePropsChartData } from '../../util/type/TypesAll';
 import { useRecoilValue } from 'recoil';
 import { selectAllDataChart } from '../../recoil/selectors/selector';
 
@@ -26,7 +26,7 @@ ChartJS.register(
     TimeScale
 );
 
-const Motor123RPMGraph = ({options }: typePropsChartData) => {
+const Motor123RPMGraph = ({ options }: typePropsChartData) => {
 
     const dataGraph = useRecoilValue(selectAllDataChart)
 
@@ -39,20 +39,20 @@ const Motor123RPMGraph = ({options }: typePropsChartData) => {
         labels,
         datasets: [
             {
-                label: 'Motor 1 RPM',
+                label: 'Motor 1',
                 borderWidth: 1, data: motor1,
-                backgroundColor: "rgba(110, 255, 0, 0.2)",
-                borderColor: "rgba(110, 255, 0, 1)"
+                backgroundColor: "#ffcccc",
+                borderColor: "#ff0000"
             }, {
-                label: 'Motor 2 RPM',
+                label: 'Motor 2',
                 borderWidth: 1, data: motor2,
-                backgroundColor: "rgba(0, 93, 255, 0.2)",
-                borderColor: "rgba(0, 93, 255, 1)"
+                backgroundColor: "#ccccff",
+                borderColor: "#0000ff"
             }, {
-                label: 'Motor 3 RPM',
+                label: 'Motor 3',
                 borderWidth: 1, data: motor3,
-                backgroundColor: "rgba(255, 0, 82, 0.2)",
-                borderColor: "rgba(255, 0, 82, 1)"
+                backgroundColor: "#ccffcc",
+                borderColor: "#00ff00"
             },
         ]
     };

@@ -1,12 +1,14 @@
 import React, { useCallback, useEffect, useState } from 'react'
-import { useWebSocket } from 'react-use-websocket/dist/lib/use-websocket';
 import { generateData } from '../src/util/generateSendData';
 import { speedTimeSend } from '../src/shared/contstant/LimitData';
 import { protocolSend, urlSend } from '../src/shared/contstant/WsURL';
-import { Box, Button, Container } from '@mui/material';
 import { useRecoilState } from 'recoil';
+import Container from '@mui/material/Container';
+import Box from '@mui/material/Box';
+import Button from '@mui/material/Button';
+import useWebSocket from 'react-use-websocket';
 
-const home = () => {
+const Send = () => {
 
     const [socketUrl, setSocketUrl] = useState<string | null>(null)
 
@@ -93,4 +95,4 @@ const home = () => {
     )
 }
 
-export default home
+export default Send

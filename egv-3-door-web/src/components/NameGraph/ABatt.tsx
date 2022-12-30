@@ -12,10 +12,10 @@ import {
     Point,
 } from 'chart.js';
 import { Line } from 'react-chartjs-2';
-import { typePropsChartData } from '../../util/type/TypeLineChart';
 import { useRecoilValue } from 'recoil';
 import { selectAllDataChart } from '../../recoil/selectors/selector';
 import dayjs from 'dayjs';
+import { typePropsChartData } from '../../util/type/TypesAll';
 
 ChartJS.register(
     CategoryScale,

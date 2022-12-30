@@ -14,7 +14,7 @@ import {
 } from 'chart.js';
 import { Line } from 'react-chartjs-2';
 import { Button, Grid, ButtonProps } from '@mui/material';
-import { typeEgvSenderData } from '../util/type/TypeEgvData';
+import { typeEgvSenderData } from '../../util/type/TypeEgvData';
 import { useTheme } from '@mui/material';
 import dayjs from 'dayjs';
 
@@ -33,7 +33,6 @@ ChartJS.register(
 
 interface Props {
     data: typeEgvSenderData | null
-    clear: boolean
 }
 
 function makeid(length: number) {

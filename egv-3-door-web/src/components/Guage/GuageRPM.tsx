@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react'
-import { typeNumberGuage } from '../../util/type/TypeNumberGuage'
 import { MeterRPM } from './MeterRPM'
+import { typeNumberGuage } from '../../util/type/TypesAll'
 const GuageRPM = ({ value }: typeNumberGuage) => {
 
     return (

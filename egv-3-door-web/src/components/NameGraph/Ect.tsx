@@ -11,7 +11,7 @@ import {
     ChartData,
 } from 'chart.js';
 import { Line } from 'react-chartjs-2';
-import { typePropsChartData } from '../../util/type/TypeLineChart';
+import { typePropsChartData } from '../../util/type/TypesAll';
 import { useRecoilValue } from 'recoil';
 import { selectAllDataChart } from '../../recoil/selectors/selector';
 

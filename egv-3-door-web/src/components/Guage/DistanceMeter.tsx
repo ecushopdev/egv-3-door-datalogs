@@ -11,13 +11,7 @@ const DistanceMeter = ({ dis, position, process }: Props) => {
     return (
         <Grid container minWidth={'100%'}>
             <Grid item xs={12}>
-                <Box>
-                    {dis}
-
-                </Box>
-            </Grid>
-            <Grid item xs={12}>
-                <Box>
+                {/* <Box>
                     <Slider
                         size="small"
                         defaultValue={0}
@@ -27,7 +21,7 @@ const DistanceMeter = ({ dis, position, process }: Props) => {
                         valueLabelDisplay="auto"
                         onChange={process}
                     />
-                </Box>
+                </Box> */}
                 <Box
                     sx={{
                         position: 'relative',

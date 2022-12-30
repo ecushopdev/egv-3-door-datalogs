@@ -1,7 +1,7 @@
 import React, { useEffect } from 'react'
 import { useRecoilValue } from 'recoil';
 import { selectAllDataChart } from '../../recoil/selectors/selector';
-import { typePropsChartData } from '../../util/type/TypeLineChart';
+import { typePropsChartData } from '../../util/type/TypesAll';
 import { ChartData, Point } from 'chart.js';
 import { Line } from 'react-chartjs-2';
 import dayjs from 'dayjs';

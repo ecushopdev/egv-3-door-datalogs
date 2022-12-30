@@ -1,19 +1,19 @@
 import { Button, Container, Grid } from '@mui/material'
 import React, { useEffect, useState } from 'react'
-import GuageSpeed from '../src/components/Guage/GuageSpeed'
-import GuageRPM from '../src/components/Guage/GuageRPM';
-import DistanceMeter from '../src/components/Guage/DistanceMeter';
+import GuageSpeed from '../../src/components/Guage/GuageSpeed'
+import GuageRPM from '../../src/components/Guage/GuageRPM';
+import DistanceMeter from '../../src/components/Guage/DistanceMeter';
 import dynamic from 'next/dynamic';
 import { useRecoilState, useRecoilValue } from 'recoil';
-import { DebugBtn } from '../src/modules/Button/Button';
-import SliderView from '../src/modules/Slider/SliderView';
-import { atomRpm, atomSpeed, cmdProtocal, urlGet } from '../src/recoil/atom/atom';
-import { WsProvider } from '../src/components/wsSocket/wsProvider';
-import { protocolReceive, protocolSend, urlReceive, urlSend } from '../src/shared/contstant/WsURL';
-import { selectMessageWs } from '../src/recoil/selectors/selector';
+import { DebugBtn } from '../../src/modules/Button/Button';
+import SliderView from '../../src/modules/Slider/SliderView';
+import { atomRpm, atomSpeed, cmdProtocal, urlGet } from '../../src/recoil/atom/atom';
+import { WsProvider } from '../../src/components/wsSocket/wsProvider';
+import { protocolReceive, protocolSend, urlReceive, urlSend } from '../../src/shared/contstant/WsURL';
+import { selectMessageWs } from '../../src/recoil/selectors/selector';
 
-const SpeedGuage = dynamic(() => import('../src/components/Guage/GuageSpeed'), { ssr: false })
-const RpmGuage = dynamic(() => import('../src/components/Guage/GuageRPM'), { ssr: false })
+const SpeedGuage = dynamic(() => import('../../src/components/Guage/GuageSpeed'), { ssr: false })
+const RpmGuage = dynamic(() => import('../../src/components/Guage/GuageRPM'), { ssr: false })
 
 const IndexOld = () => {
 

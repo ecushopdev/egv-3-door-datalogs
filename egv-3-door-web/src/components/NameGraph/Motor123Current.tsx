@@ -12,7 +12,7 @@ import {
 } from 'chart.js';
 import { Line } from 'react-chartjs-2';
 import 'chartjs-adapter-dayjs-3';
-import { typePropsChartData } from '../../util/type/TypeLineChart';
+import { typePropsChartData } from '../../util/type/TypesAll';
 import { useRecoilValue } from 'recoil';
 import { selectAllDataChart } from '../../recoil/selectors/selector';
 
@@ -27,7 +27,7 @@ ChartJS.register(
     TimeScale
 );
 
-const Motor123CurrentGraph = ({options }: typePropsChartData) => {
+const Motor123CurrentGraph = ({ options }: typePropsChartData) => {
 
     const dataGraph = useRecoilValue(selectAllDataChart)
 
@@ -40,20 +40,20 @@ const Motor123CurrentGraph = ({options }: typePropsChartData) => {
         labels,
         datasets: [
             {
-                label: 'Motor 1 Current',
+                label: 'Motor 1',
                 borderWidth: 1, data: motor1,
-                backgroundColor: "rgba(255, 0, 162, 0.2)",
-                borderColor: "rgba(255, 0, 162, 1)"
+                backgroundColor: "#ffcccc",
+                borderColor: "#ff0000"
             }, {
-                label: 'Motor 2 Current',
+                label: 'Motor 2',
                 borderWidth: 1, data: motor2,
-                backgroundColor: "rgba(115, 125, 137, 0.2)",
-                borderColor: "rgba(115, 125, 137, 1)"
+                backgroundColor: "#ccccff",
+                borderColor: "#0000ff"
             }, {
-                label: 'Motor 3 Current',
+                label: 'Motor 3',
                 borderWidth: 1, data: motor3,
-                backgroundColor: "rgba(254, 188, 18, 0.2)",
-                borderColor: "rgba(254, 188, 18, 1)"
+                backgroundColor: "#ccffcc",
+                borderColor: "#00ff00"
             },
         ]
     };

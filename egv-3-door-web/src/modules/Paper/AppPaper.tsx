@@ -5,7 +5,7 @@ import { AppPaperProps } from '../../util/type/TypeAppPaper'
 const AppPaper = ({ children, text }: AppPaperProps) => {
     return (
         <Grid item xs={12} md={12} lg={6} xl={4}>
-            <Box sx={{ mt: 3, mb: 3, justifyContent: 'center', alignItems: 'center', display: 'flex' }}>
+            <Box sx={{ mt: 1, mb: 1, justifyContent: 'center', alignItems: 'center', display: 'flex' }}>
                 <Typography>
                     {text}
                 </Typography>
@@ -16,7 +16,7 @@ const AppPaper = ({ children, text }: AppPaperProps) => {
                     sx={{
                         margin: 0,
                         backgroundColor: '#f2f2f2',
-                        minWidth: 400,
+                        // minWidth: 400,
                         minHeight: 200
                     }}
                 >

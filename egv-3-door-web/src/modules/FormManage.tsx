@@ -1,13 +1,18 @@
-import React, { Component } from 'react'
+import React from 'react'
 
-export class FormManage extends Component {
-    render() {
-        return (
-            <div>
+interface appFormSetting {
+    timeoutConfig: number
+    inputDistance: number
+    inputTimeout: number
+}
 
-            </div>
-        )
-    }
+const FormManage = ({ timeoutConfig, inputDistance, inputTimeout }: appFormSetting) => {
+
+
+
+    return (
+        <div>FormManage</div>
+    )
 }
 
 export default FormManage

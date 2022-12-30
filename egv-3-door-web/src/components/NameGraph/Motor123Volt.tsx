@@ -11,7 +11,7 @@ import {
     ChartData,
 } from 'chart.js';
 import { Line } from 'react-chartjs-2';
-import { typePropsChartData } from '../../util/type/TypeLineChart';
+import { typePropsChartData } from '../../util/type/TypesAll';
 import { useRecoilValue } from 'recoil';
 import { selectAllDataChart } from '../../recoil/selectors/selector';
 
@@ -39,20 +39,20 @@ const Motor123VoltGraph = ({ options }: typePropsChartData) => {
         labels,
         datasets: [
             {
-                label: 'Motor 1 Volt',
+                label: 'Motor 1',
                 borderWidth: 1, data: motor1,
-                backgroundColor: "rgba(77, 77, 77, 0.2)",
-                borderColor: "rgba(77, 77, 77, 1)"
+                backgroundColor: "#ffcccc",
+                borderColor: "#ff0000"
             }, {
-                label: 'Motor 2 Volt',
+                label: 'Motor 2',
                 borderWidth: 1, data: motor2,
-                backgroundColor: "rgba(220, 109, 109, 0.2)",
-                borderColor: "rgba(220, 109, 109, 1)"
+                backgroundColor: "#ccccff",
+                borderColor: "#0000ff"
             }, {
-                label: 'Motor 3 Volt',
+                label: 'Motor 3',
                 borderWidth: 1, data: motor3,
-                backgroundColor: "rgba(102, 103, 247, 0.2)",
-                borderColor: "rgba(102, 103, 247, 1)"
+                backgroundColor: "#ccffcc",
+                borderColor: "#00ff00"
             },
         ]
     };

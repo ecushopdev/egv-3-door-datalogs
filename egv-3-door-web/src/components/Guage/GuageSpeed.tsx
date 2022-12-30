@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react'
-import { typeNumberGuage } from '../../util/type/TypeNumberGuage'
 import { MeterSpeed } from './MeterSpeed'
+import { typeNumberGuage } from '../../util/type/TypesAll'
 
 const GuageSpeed = ({ value }: typeNumberGuage) => {
 
