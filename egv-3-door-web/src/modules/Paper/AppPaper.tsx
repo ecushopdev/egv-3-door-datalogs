@@ -1,6 +1,6 @@
 import { Box, Grid, Paper, Typography } from '@mui/material'
 import React from 'react'
-import { AppPaperProps } from '../../util/type/TypeAppPaper'
+import { AppPaperProps } from '../../util/type/TypesAll'
 
 const AppPaper = ({ children, text }: AppPaperProps) => {
     return (

@@ -1,7 +1,7 @@
 import { Button, ButtonProps, Grid } from "@mui/material";
 import React from 'react'
-import { PropsButton } from "../../util/type/TypeButtonColor";
 import { blue, indigo, red } from "@mui/material/colors";
+import { PropsButton } from "../../util/type/TypesAll";
 
 interface Props {
     status: boolean

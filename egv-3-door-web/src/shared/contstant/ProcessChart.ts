@@ -1,4 +1,5 @@
-import { typeReportChart, typeReportChartMultipLine } from "../../util/type/TypeLineChart"
+import { typeReportChartMultipLine } from "../../util/type/TypeLineChart"
+import { typeReportChart } from "../../util/type/TypesAll"
 
 let reportChart: typeReportChart = {
     "SOC": {

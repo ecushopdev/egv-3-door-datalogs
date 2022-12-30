@@ -9,22 +9,25 @@ import DialogTitle from '@mui/material/DialogTitle';
 import DialogContent from '@mui/material/DialogContent';
 import DialogContentText from '@mui/material/DialogContentText';
 import DialogActions from '@mui/material/DialogActions';
-import Box from '@mui/material/Box';
+import SettingsIcon from '@mui/icons-material/Settings';
+import IconButton from '@mui/material/IconButton';
+import { typeEgvSenderData } from '../util/type/TypeEgvData';
 
 interface Props {
-    data: Object
+    payLoad: typeEgvSenderData | null;
 }
 
 const SpeedGuage = dynamic(() => import('../../src/components/Guage/GuageSpeed'), { ssr: false })
 const RpmGuage = dynamic(() => import('../../src/components/Guage/GuageRPM'), { ssr: false })
 
-const MainGuage = ({ data }: Props) => {
+const MainGuage = ({ payLoad }: Props) => {
 
-    const [speed, setSpeed] = useState<number>(0)
-    const [rpm, setRpm] = useState<number>(0)
-    const [distance, setDistance] = useState<number>(0)
-    const [position, setPosition] = useState<number>(0);
-    const [open, setOpen] = React.useState(false);
+    const [dataSpeed, setDataSpeed] = useState<number>(0)
+    const [dataRpm, setDataRpm] = useState<number>(0)
+    const [dataDistance, setDataDistance] = useState<number>(0)
+
+    const [position, setPosition] = useState<number>(0)
+    const [open, setOpen] = React.useState(false)
 
     const handleChangeDistance = (event: Event, newValue: number | number[]) => {
         const val = newValue as number;
@@ -35,7 +38,9 @@ const MainGuage = ({ data }: Props) => {
 
     const [intervalState, setIntervalState] = useState<NodeJS.Timer | null>(null);
 
-    const processData = useCallback((data: Object) => {
+    const processData = useCallback((data: typeEgvSenderData) => {
+        console.log(data)
+        const { speed } = data
     }, [intervalState])
 
     const stopProcess = useCallback(async () => {
@@ -58,27 +63,41 @@ const MainGuage = ({ data }: Props) => {
     }
 
     useEffect(() => {
-        if (data && data) {
-            processData(data)
+        if (payLoad) {
+            processData(payLoad)
         } else {
             stopProcess()
         }
-    }, [data])
+    }, [payLoad])
 
     return (
         <>
             <Grid container spacing={2}>
-                <Grid item xs={12} md={6} lg={6} xl={6} sx={{ justifyContent: 'center', display: 'flex' }}>
-                    <SpeedGuage value={speed} />
+                <Grid item xs={12} md={12} lg={12} xl={12} sx={{ justifyContent: 'flex-end', display: 'flex' }}>
+                    <IconButton
+                        onClick={handleClickOpen}
+                    >
+                        <SettingsIcon
+                            fontSize='large'
+                            sx={{
+                                color: '#1e88e5'
+                            }}
+                        />
+                    </IconButton>
                 </Grid>
 
                 <Grid item xs={12} md={6} lg={6} xl={6} sx={{ justifyContent: 'center', display: 'flex' }}>
-                    <RpmGuage value={rpm} />
+                    <SpeedGuage value={dataSpeed} />
+                </Grid>
+
+                <Grid item xs={12} md={6} lg={6} xl={6} sx={{ justifyContent: 'center', display: 'flex' }}>
+                    <RpmGuage value={dataRpm} />
                 </Grid>
 
                 <Grid item xs={12} md={12} lg={12} xl={12} sx={{ justifyContent: 'center', display: 'flex' }}>
-                    <DistanceMeter dis={distance} position={position} process={handleChangeDistance} />
+                    <DistanceMeter dis={dataDistance} position={position} process={handleChangeDistance} />
                 </Grid>
+
             </Grid >
 
             <Grid container spacing={2} sx={{ mt: 2, justifyContent: 'flex-end' }}>
@@ -86,16 +105,7 @@ const MainGuage = ({ data }: Props) => {
                     <Button
                         fullWidth
                         variant='contained'
-                        onClick={handleClickOpen}
-                    >
-                        Setting
-                    </Button>
-                </Grid>
-                <Grid item xs={6}>
-                    <Button
-                        fullWidth
-                        variant='contained'
-                        color='warning'
+                        color='primary'
                         onClick={reset}
                     >
                         Reset

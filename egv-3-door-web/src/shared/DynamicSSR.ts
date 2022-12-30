@@ -1,4 +1,4 @@
-import dynamic from 'next/dynamic'
+import dynamic from 'next/dist/shared/lib/dynamic';
 
 const GraphAbatt = dynamic(import('../../src/components/NameGraph/ABatt'), { ssr: false })
 const GraphAcp = dynamic(import('../../src/components/NameGraph/Acp'), { ssr: false })

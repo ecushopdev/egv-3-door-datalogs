@@ -1,23 +1,30 @@
 import React, { useCallback, useEffect, useState } from 'react'
 import useWebSocket from 'react-use-websocket';
-import { useRecoilState } from 'recoil';
 import { atomAllDataChart } from '../src/recoil/atom/atom';
 import { protocolReceive, urlReceive } from '../src/shared/contstant/WsURL';
 import { typeEgvSenderData } from '../src/util/type/TypeEgvData';
 import { limitDataChart } from '../src/shared/contstant/LimitData';
 import MainGraph from '../src/components/MainGraph';
 import Tab from '@mui/material/Tab';
-import TabContext from '@mui/lab/TabContext';
-import TabList from '@mui/lab/TabList';
-import TabPanel from '@mui/lab/TabPanel';
 import MainGuage from '../src/components/MainGuage';
 import Box from '@mui/material/Box';
 import Container from '@mui/material/Container';
+import TabContext from '@mui/lab/TabContext';
+import TabList from '@mui/lab/TabList';
+import TabPanel from '@mui/lab/TabPanel';
+import { selectAllDataChart } from '../src/recoil/selectors/selector';
+import { useRecoilValue, useSetRecoilState } from 'recoil';
+import dynamic from 'next/dynamic';
+
+const DynamicGuage = dynamic(() => import('../src/components/MainGuage'), { ssr: true })
 
 const Index = () => {
 
-  const [allDataChart, setAllDataChart] = useRecoilState<typeEgvSenderData[]>(atomAllDataChart)
+  const allDataChart = useRecoilValue(selectAllDataChart)
+  // const [allDataChart, setAllDataChart] = useRecoilState<typeEgvSenderData[]>(atomAllDataChart)
+  const setAllDataChart = useSetRecoilState<typeEgvSenderData[]>(atomAllDataChart)
 
+  const [lastData, setLastData] = useState<typeEgvSenderData | null>(null)
   const [socketUrl, setSocketUrl] = useState<string | null>(null)
 
   const [value, setValue] = React.useState('1');
@@ -43,15 +50,23 @@ const Index = () => {
   const loadNewData = useCallback(async (newData: any) => {
     const { data } = newData
     const thisData = JSON.parse(data)
-    console.log(thisData)
+    // console.log(thisData)
     if (thisData && thisData) {
       if (allDataChart.length < limitDataChart) {
-        await setAllDataChart([...allDataChart, thisData])
+        await setAllDataChart((oldData) => [
+          ...oldData,
+          thisData
+        ])
+        // await setLastData(thisData)
       } else {
         const oldData = allDataChart.filter((item, index) => {
           return index !== 0
         })
-        await setAllDataChart([...oldData, thisData])
+        await setAllDataChart((oldData) => [
+          ...oldData,
+          thisData
+        ])
+        // await setLastData(thisData)
       }
     }
   }, [lastMessage, allDataChart])
@@ -79,7 +94,8 @@ const Index = () => {
             </TabList>
           </Box>
           <TabPanel value="1">
-            <MainGuage data={allDataChart} />
+            {/* <MainGuage data={allDataChart} /> */}
+            <DynamicGuage data={lastData} />
           </TabPanel>
           <TabPanel value="2">
             <MainGraph />
