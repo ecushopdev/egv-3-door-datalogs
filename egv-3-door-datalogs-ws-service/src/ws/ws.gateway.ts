@@ -24,6 +24,15 @@ export class WsGateway {
     });
   }
 
+  broadcastNotification(data: any) {
+    const broadCastMessage = JSON.stringify(data);
+    this.server.clients.forEach((client: WebSocket) => {
+      if (client.protocol === 'egv-notification') {
+        client.send(broadCastMessage);
+      }
+    });
+  }
+
   broadcastStatus(data: any) {
     const broadCastMessage = JSON.stringify(data);
     this.server.clients.forEach((client: WebSocket) => {

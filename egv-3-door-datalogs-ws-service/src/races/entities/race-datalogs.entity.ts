@@ -6,6 +6,8 @@ export class RaceDatalogsEntity {
   @ApiProperty({ type: Number })
   rangeToGo: number;
   @ApiProperty({ type: Number })
+  dragDistance: number;
+  @ApiProperty({ type: Number })
   speed: number;
   @ApiProperty({ type: Number })
   lat: number;

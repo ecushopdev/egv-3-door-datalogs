@@ -23,6 +23,14 @@ export class UploadService {
       });
     });
   }
+  async getHeaderFile(params: S3.Types.HeadObjectRequest) {
+    return new Promise((resolve, reject) => {
+      this.s3.headObject(params, function (error, data) {
+        if (error) reject(error);
+        resolve(data);
+      });
+    });
+  }
 
   async getFileStream(params: S3.Types.GetObjectRequest) {
     return new Promise((resolve, reject) => {

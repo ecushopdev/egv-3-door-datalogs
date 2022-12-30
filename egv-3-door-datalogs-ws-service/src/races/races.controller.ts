@@ -10,6 +10,7 @@ import {
   Param,
   Patch,
   Post,
+  Req,
   Res,
   UploadedFile,
   UseInterceptors,
@@ -32,7 +33,7 @@ import { UpdateQuery } from 'mongoose';
 import dayjs from 'dayjs';
 import { ParseObjectIdPipe } from '../common/pipe/ParseObjectId.pipe';
 import { Races, RaceStatus } from './schema/race.schema';
-import { Response } from 'express';
+import { Request, Response } from 'express';
 import { WsGateway } from '../ws/ws.gateway';
 import { CreateDatalogDto } from '../datalogs/dto/create-datalog.dto';
 import { NotFoundErrorEntity } from '../common/entities/not-found-error.entity';
@@ -43,6 +44,7 @@ import { FileInterceptor } from '@nestjs/platform-express';
 import { VideoValidatePipe } from '../common/pipe/video-validate.pipe';
 import { S3 } from 'aws-sdk';
 import { UploadService } from '../upload/upload.service';
+import { InjectS3, S3 as NestJsS3 } from 'nestjs-s3';
 
 @Controller('races')
 @ApiTags('Races')
@@ -52,6 +54,7 @@ export class RacesController {
     private readonly datalogsService: DataLogsService,
     private readonly uploadService: UploadService,
     private readonly wsGateway: WsGateway,
+    @InjectS3() private readonly s3: NestJsS3,
   ) {}
 
   @Post()
@@ -145,6 +148,10 @@ export class RacesController {
       race: id,
     }));
     await this.datalogsService.createMany(data);
+    this.wsGateway.broadcastNotification({
+      title: `Save Logs ${id} success`,
+      data: { id },
+    });
     return res.status(HttpStatus.NO_CONTENT).send();
   }
 
@@ -183,6 +190,10 @@ export class RacesController {
       await this.racesService.update(id, {
         videoUrl: `/egv/api/v1/races/${id}/video`,
       });
+      this.wsGateway.broadcastNotification({
+        title: `Save Video Log ${id} success`,
+        data: { id },
+      });
       return res.status(HttpStatus.NO_CONTENT).send();
     } catch (e: any) {
       throw new InternalServerErrorException(e.message);
@@ -190,17 +201,56 @@ export class RacesController {
   }
 
   @Get(':id/video')
-  async getVideo(@Param('id') id: string, @Res() res: Response) {
+  async getVideo(
+    @Param('id') id: string,
+    @Req() req: Request,
+    @Res() res: Response,
+  ) {
     try {
-      const result: any = await this.uploadService.getFile({
+      const range: any = req.headers.range;
+      if (!range) {
+        const result: any = await this.uploadService.getFile({
+          Bucket: process.env.S3_BUCKET,
+          Key: `videos/${id}.mp4`,
+        });
+        res.writeHead(200, {
+          'Content-Type': result.ContentType,
+          'Cross-Origin-Resource-Policy': 'no-cors',
+        });
+        return res.end(result.Body);
+      }
+
+      const videoHeader: any = await this.uploadService.getHeaderFile({
         Bucket: process.env.S3_BUCKET,
         Key: `videos/${id}.mp4`,
       });
-      res.writeHead(200, {
-        'Content-Type': result.ContentType,
-        'Cross-Origin-Resource-Policy': 'no-cors',
-      });
-      res.end(result.Body);
+
+      const videoSize = videoHeader.ContentLength;
+
+      const chunkSize = 10 ** 6;
+
+      const start = Number(range.replace(/\D/g, ''));
+      const end = Math.min(start + chunkSize, videoSize - 1);
+      const contentLength = end - start + 1;
+      const Range = `bytes ${start}-${end}/${videoSize}`;
+      const headers = {
+        'Content-Range': Range,
+        'Accept-Ranges': 'bytes',
+        'Content-Length': contentLength,
+        'Content-Type': 'video/mp4',
+      };
+
+      res.writeHead(206, headers);
+
+      const videoStream = await this.s3
+        .getObject({
+          Bucket: process.env.S3_BUCKET,
+          Key: `videos/${id}.mp4`,
+          Range: range,
+        })
+        .createReadStream();
+
+      videoStream.pipe(res);
     } catch (e: any) {
       throw new InternalServerErrorException(e.message);
     }

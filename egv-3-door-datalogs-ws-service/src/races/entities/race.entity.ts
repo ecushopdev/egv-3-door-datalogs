@@ -8,10 +8,10 @@ export class RaceEntity {
     default: RaceStatus.Created,
   })
   status: RaceStatus = RaceStatus.Created;
-  @ApiProperty({ type: String })
-  timeout1: string = undefined;
-  @ApiProperty({ type: String })
-  timeout2: string = undefined;
+  @ApiProperty({ type: Number })
+  timeout1: number = undefined;
+  @ApiProperty({ type: Number })
+  timeout2: number = undefined;
   @ApiProperty({ type: Date })
   startTimestamp: Date = undefined;
   @ApiPropertyOptional({ type: Date })

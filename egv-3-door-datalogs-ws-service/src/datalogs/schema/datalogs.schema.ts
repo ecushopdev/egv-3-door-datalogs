@@ -27,6 +27,8 @@ export class DataLogs {
   @Prop()
   rangeToGo: number;
   @Prop()
+  dragDistance: number;
+  @Prop()
   speed: number;
   @Prop()
   lat: number;
