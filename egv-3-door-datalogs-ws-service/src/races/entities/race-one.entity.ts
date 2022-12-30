@@ -13,10 +13,10 @@ export class RaceOneEntity {
   startTimestamp: Date = undefined;
   @ApiPropertyOptional({ type: Date })
   stopTimestamp?: Date = undefined;
-  @ApiProperty({ type: String })
-  timeout1: string = undefined;
-  @ApiProperty({ type: String })
-  timeout2: string = undefined;
+  @ApiProperty({ type: Number })
+  timeout1: number = undefined;
+  @ApiProperty({ type: Number })
+  timeout2: number = undefined;
   @ApiPropertyOptional({ type: RaceDatalogsEntity, isArray: true })
   datalogs: RaceDatalogsEntity[] = undefined;
   @ApiPropertyOptional({ type: String })

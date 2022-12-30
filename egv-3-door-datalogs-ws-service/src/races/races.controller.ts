@@ -215,8 +215,6 @@ export class RacesController {
         });
         res.writeHead(200, {
           'Content-Type': result.ContentType,
-          'Content-Length': result.ContentLength,
-          'Accept-Ranges': 'bytes',
           'Cross-Origin-Resource-Policy': 'no-cors',
         });
         return res.end(result.Body);
@@ -242,15 +240,13 @@ export class RacesController {
         'Content-Type': 'video/mp4',
       };
 
-      console.log({ start, end, videoSize, range, Range });
-
       res.writeHead(206, headers);
 
       const videoStream = await this.s3
         .getObject({
           Bucket: process.env.S3_BUCKET,
           Key: `videos/${id}.mp4`,
-          Range,
+          Range: range,
         })
         .createReadStream();
 
