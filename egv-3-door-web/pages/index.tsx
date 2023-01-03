@@ -94,8 +94,8 @@ const Index = () => {
             </TabList>
           </Box>
           <TabPanel value="1">
-            {/* <MainGuage data={allDataChart} /> */}
-            <DynamicGuage data={lastData} />
+            {/* <MainGuage payLoad={lastData} /> */}
+            <DynamicGuage payLoad={lastData} />
           </TabPanel>
           <TabPanel value="2">
             <MainGraph />

@@ -93,10 +93,6 @@ const generateReceivedData = (state: boolean): typeEgvSenderData => {
         // timestamp = randomDate(new Date(2022, 12, 28), new Date());
     }
 
-    function randomDate(start: any, end: any) {
-        return new Date(start.getTime() + Math.random() * (end.getTime() - start.getTime()));
-    }
-
     return {
         soc,
         rangeToGo,

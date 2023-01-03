@@ -1,19 +1,13 @@
 import React from "react";
 import { useMeter, useNumberFormatter } from "react-aria";
 
-interface Props {
-    value: number
-    minValue: number
-    maxValue: number
-}
-
 export function MeterSpeed(props: any) {
     let { value, minValue = 0, maxValue = 100 } = props;
     let { meterProps } = useMeter(props);
 
     let size = 300;
     let center = size / 2;
-    let strokeWidth = 14;
+    let strokeWidth = 28;
     let r = center - strokeWidth;
     let c = 2 * r * Math.PI;
     let a = c * (270 / 360);

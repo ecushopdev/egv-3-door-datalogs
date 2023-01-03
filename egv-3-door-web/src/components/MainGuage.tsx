@@ -12,6 +12,8 @@ import DialogActions from '@mui/material/DialogActions';
 import SettingsIcon from '@mui/icons-material/Settings';
 import IconButton from '@mui/material/IconButton';
 import { typeEgvSenderData } from '../util/type/TypeEgvData';
+import AppFormSetting from '../modules/Form/AppFormSetting';
+import AppTestForm, { typeTimeValue } from '../modules/Form/AppTestForm';
 
 interface Props {
     payLoad: typeEgvSenderData | null;
@@ -29,6 +31,11 @@ const MainGuage = ({ payLoad }: Props) => {
     const [position, setPosition] = useState<number>(0)
     const [open, setOpen] = React.useState(false)
 
+    const [timeValue, setTimeValue] = useState<typeTimeValue>({
+        timeout1: 0,
+        timeout2: 0
+    })
+
     const handleChangeDistance = (event: Event, newValue: number | number[]) => {
         const val = newValue as number;
         const percent = val / (402 / 100);
@@ -40,8 +47,10 @@ const MainGuage = ({ payLoad }: Props) => {
 
     const processData = useCallback((data: typeEgvSenderData) => {
         console.log(data)
-        const { speed } = data
-    }, [intervalState])
+        if (data === null) {
+            console.log('cannot process data')
+        }
+    }, [intervalState, payLoad])
 
     const stopProcess = useCallback(async () => {
         if (intervalState) {
@@ -49,6 +58,15 @@ const MainGuage = ({ payLoad }: Props) => {
         }
     }, [intervalState])
 
+    const processSetting = (data: typeTimeValue) => {
+        handleClose()
+        setTimeValue(data)
+        console.log(data)
+    }
+
+    const reset = async () => {
+        await console.log('reset')
+    }
 
     const handleClickOpen = () => {
         setOpen(true);
@@ -58,15 +76,12 @@ const MainGuage = ({ payLoad }: Props) => {
         setOpen(false);
     };
 
-    const reset = async () => {
-        await console.log('reset')
-    }
-
     useEffect(() => {
-        if (payLoad) {
-            processData(payLoad)
-        } else {
+        if (payLoad === null) {
+            console.log(payLoad)
             stopProcess()
+        } else {
+            processData(payLoad)
         }
     }, [payLoad])
 
@@ -97,7 +112,6 @@ const MainGuage = ({ payLoad }: Props) => {
                 <Grid item xs={12} md={12} lg={12} xl={12} sx={{ justifyContent: 'center', display: 'flex' }}>
                     <DistanceMeter dis={dataDistance} position={position} process={handleChangeDistance} />
                 </Grid>
-
             </Grid >
 
             <Grid container spacing={2} sx={{ mt: 2, justifyContent: 'flex-end' }}>
@@ -118,25 +132,28 @@ const MainGuage = ({ payLoad }: Props) => {
                 onClose={handleClose}
                 aria-labelledby="alert-dialog-title"
                 aria-describedby="alert-dialog-description"
+                maxWidth='xl'
             >
                 <DialogTitle id="alert-dialog-title">
-                    {"Use Google's location service?"}
+                    {"Setting"}
                 </DialogTitle>
                 <DialogContent>
-                    <DialogContentText id="alert-dialog-description">
-                        Let Google help apps determine location. This means sending anonymous
-                        location data to Google, even when no apps are running.
-                    </DialogContentText>
+                    <AppFormSetting
+                        defaultValues={timeValue}
+                        onSubmit={processSetting}
+                        open={handleClose}
+                    />
+                    {/* <AppTestForm
+                        defaultValues={timeValue}
+                        onSubmit={processSetting}
+                        open={handleClose}
+                    /> */}
                 </DialogContent>
                 <DialogActions>
-                    <Button onClick={handleClose}>Disagree</Button>
-                    <Button onClick={handleClose} autoFocus>
-                        Agree
-                    </Button>
+
                 </DialogActions>
             </Dialog>
         </>
-
     )
 }
 
