@@ -4,9 +4,13 @@ interface typeEgvSender {
 }
 
 interface typeEgvSenderData {
+    // race : string | null
     soc: number | null;
     rangeToGo: number | null;
+    dragDistance: number | null
     speed: number | null;
+    lat: number | null
+    lng: number | null
     voltBatt: number | null;
     motor1RPM: number | null;
     motor1Volt: number | null;

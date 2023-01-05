@@ -1,12 +1,14 @@
 import React, { useCallback, useEffect, useState } from 'react'
-import { generateData } from '../src/util/generateSendData';
-import { speedTimeSend } from '../src/shared/contstant/LimitData';
 import { protocolSend, urlSend } from '../src/shared/contstant/WsURL';
 import { useRecoilState } from 'recoil';
 import Container from '@mui/material/Container';
 import Box from '@mui/material/Box';
 import Button from '@mui/material/Button';
 import useWebSocket from 'react-use-websocket';
+import { generateData } from '../src/util/helper/oldGenData/generateSendData';
+import { speedTimeSend } from '../src/shared/contstant/LimitData';
+import Grid from '@mui/material/Grid';
+import Typography from '@mui/material/Typography';
 
 const Send = () => {
 
@@ -64,17 +66,31 @@ const Send = () => {
     }, [readyState, socketUrl, status])
 
     return (
-        <>
-            <Container>
-                <Box>
-                    Hello World
-                </Box>
-                <Box>
+        <Container>
+            <Grid
+                container
+                spacing={1}
+                sx={{
+                    bgcolor: 'rgba(227, 227, 227, 1)',
+                    pt: 4,
+                    pb: 4,
+                    pl: 2,
+                    pr: 2
+                }}
+            >
+                <Grid item xs={12}>
+                    <Typography>
+                        Hello World
+                    </Typography>
+                </Grid>
+                <Grid item xs={12}>
                     {status ? (
                         <>
                             <Button
                                 variant='contained'
+                                fullWidth
                                 onClick={handlerChangeStatus}
+                                color='warning'
                             >
                                 Stop
                             </Button>
@@ -83,15 +99,17 @@ const Send = () => {
                         <>
                             <Button
                                 variant='contained'
+                                fullWidth
                                 onClick={handlerChangeStatus}
+                                color='primary'
                             >
                                 Start
                             </Button>
                         </>
                     )}
-                </Box>
-            </Container>
-        </>
+                </Grid>
+            </Grid>
+        </Container>
     )
 }
 

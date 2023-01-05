@@ -6,11 +6,7 @@ import TextField from '@mui/material/TextField';
 import { SubmitHandler, Controller, useForm } from 'react-hook-form';
 import * as Yup from 'yup';
 import { yupResolver } from '@hookform/resolvers/yup';
-
-export interface typeTimeValue {
-    timeout1: number | undefined;
-    timeout2: number | undefined;
-}
+import { typeTimeValue } from '../../util/type/TypeFormTime';
 
 interface typeFormSubmit {
     defaultValues?: typeTimeValue | null

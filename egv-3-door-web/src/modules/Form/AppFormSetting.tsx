@@ -6,11 +6,7 @@ import TextField from '@mui/material/TextField';
 import { SubmitHandler, Controller, useForm } from 'react-hook-form';
 import * as Yup from 'yup';
 import { yupResolver } from '@hookform/resolvers/yup';
-
-export interface typeTimeValue {
-    timeout1: number | undefined;
-    timeout2: number | undefined;
-}
+import { typeTimeValue } from '../../util/type/TypeFormTime';
 
 interface typeFormSubmit {
     defaultValues: typeTimeValue | null
@@ -70,7 +66,7 @@ const AppFormSetting: React.FC<typeFormSubmit> = ({
                                 variant='outlined'
                                 type='number'
                                 size='medium'
-                                label='odo Meter Start'
+                                label='Set Timeout 1'
                                 InputLabelProps={{ shrink: Boolean(field.value) }}
                                 error={Boolean(errors?.timeout1)}
                                 helperText={errors?.timeout1?.message}
@@ -92,7 +88,7 @@ const AppFormSetting: React.FC<typeFormSubmit> = ({
                                 variant='outlined'
                                 type='number'
                                 size='medium'
-                                label='odo Meter Start'
+                                label='Set Timeout 2'
                                 InputLabelProps={{ shrink: Boolean(field.value) }}
                                 error={Boolean(errors?.timeout2)}
                                 helperText={errors?.timeout2?.message}

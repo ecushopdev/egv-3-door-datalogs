@@ -1,12 +1,12 @@
 import { selector } from "recoil";
-import { atomAllDataChart, atomLastMessage, } from "../atom/atom";
+import { atomAllDataChart, atomLastMessage, loadDataRealtime, } from "../atom/atom";
 import { typeEgvSenderData } from "../../util/type/TypeEgvData";
 
-const selectMessageWs = selector({
+const selectMessageWs = selector<Object>({
     key: 'SelectMessageWs',
     get: ({ get }) => {
         const message = get(atomLastMessage)
-        const data: Object | null = message
+        const data = message
         return data
     }
 })
@@ -15,13 +15,24 @@ const selectAllDataChart = selector<typeEgvSenderData[]>({
     key: 'SelectAllDataChart',
     get: ({ get }) => {
         const thisData = get(atomAllDataChart)
-        const value: typeEgvSenderData[] = thisData
+        const value = thisData
         return value
     }
 })
 
+const addItem = selector({
+    key: 'addItem',
+    get: ({ get }) => {
+        let dataReturn
+        const value = get(loadDataRealtime)
+        dataReturn = value
+        return dataReturn
+    }
+})
 
 export {
     selectMessageWs,
     selectAllDataChart
+
+    , addItem
 }

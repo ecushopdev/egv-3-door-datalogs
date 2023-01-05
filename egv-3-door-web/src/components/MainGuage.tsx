@@ -1,26 +1,26 @@
 import React, { useState } from 'react'
 import { useEffect, useCallback } from 'react';
-import DistanceMeter from './Guage/DistanceMeter';
 import Grid from '@mui/material/Grid';
 import dynamic from 'next/dynamic';
 import Button from '@mui/material/Button';
 import Dialog from '@mui/material/Dialog';
 import DialogTitle from '@mui/material/DialogTitle';
 import DialogContent from '@mui/material/DialogContent';
-import DialogContentText from '@mui/material/DialogContentText';
-import DialogActions from '@mui/material/DialogActions';
-import SettingsIcon from '@mui/icons-material/Settings';
-import IconButton from '@mui/material/IconButton';
 import { typeEgvSenderData } from '../util/type/TypeEgvData';
 import AppFormSetting from '../modules/Form/AppFormSetting';
-import AppTestForm, { typeTimeValue } from '../modules/Form/AppTestForm';
+import { typeTimeValue } from '../util/type/TypeFormTime';
+import AddTimeRace from '../fetch/data/addTime';
+
+import IconButton from '@mui/material/IconButton';
+import SettingsIcon from '@mui/icons-material/Settings';
+import DistanceMeter from './realtime/Guage/DistanceMeter';
 
 interface Props {
     payLoad: typeEgvSenderData | null;
 }
 
-const SpeedGuage = dynamic(() => import('../../src/components/Guage/GuageSpeed'), { ssr: false })
-const RpmGuage = dynamic(() => import('../../src/components/Guage/GuageRPM'), { ssr: false })
+const SpeedGuage = dynamic(() => import('./realtime/Guage/GuageSpeed'), { ssr: false })
+const RpmGuage = dynamic(() => import('./realtime/Guage/GuageRPM'), { ssr: false })
 
 const MainGuage = ({ payLoad }: Props) => {
 
@@ -58,22 +58,19 @@ const MainGuage = ({ payLoad }: Props) => {
         }
     }, [intervalState])
 
-    const processSetting = (data: typeTimeValue) => {
+    const processSetting = async (data: typeTimeValue) => {
         handleClose()
         setTimeValue(data)
+        const addTime = await AddTimeRace(data)
         console.log(data)
     }
 
-    const reset = async () => {
-        await console.log('reset')
+    const reset = () => {
+        console.log('reset')
     }
 
-    const handleClickOpen = () => {
-        setOpen(true);
-    };
-
     const handleClose = () => {
-        setOpen(false);
+        setOpen(!open)
     };
 
     useEffect(() => {
@@ -87,10 +84,12 @@ const MainGuage = ({ payLoad }: Props) => {
 
     return (
         <>
-            <Grid container spacing={2}>
-                <Grid item xs={12} md={12} lg={12} xl={12} sx={{ justifyContent: 'flex-end', display: 'flex' }}>
+            <Grid container spacing={2} >
+                <Grid item
+                    xs={12}
+                    sx={{ justifyContent: 'flex-end', display: 'flex' }}>
                     <IconButton
-                        onClick={handleClickOpen}
+                        onClick={handleClose}
                     >
                         <SettingsIcon
                             fontSize='large'
@@ -110,7 +109,7 @@ const MainGuage = ({ payLoad }: Props) => {
                 </Grid>
 
                 <Grid item xs={12} md={12} lg={12} xl={12} sx={{ justifyContent: 'center', display: 'flex' }}>
-                    <DistanceMeter dis={dataDistance} position={position} process={handleChangeDistance} />
+                    <DistanceMeter position={position} process={handleChangeDistance} />
                 </Grid>
             </Grid >
 
@@ -143,15 +142,7 @@ const MainGuage = ({ payLoad }: Props) => {
                         onSubmit={processSetting}
                         open={handleClose}
                     />
-                    {/* <AppTestForm
-                        defaultValues={timeValue}
-                        onSubmit={processSetting}
-                        open={handleClose}
-                    /> */}
                 </DialogContent>
-                <DialogActions>
-
-                </DialogActions>
             </Dialog>
         </>
     )

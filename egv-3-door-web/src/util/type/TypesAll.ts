@@ -11,19 +11,6 @@ interface PropsButton {
     command: () => void
 }
 
-interface typeReportChart {
-    [key: string]: {
-        data: ChartData<'line'>
-    }
-}
-
-interface TypeSliderProps {
-    values: number,
-    max: number,
-    color: any,
-    handleChange: (event: Event, newValue: number | number[]) => void
-}
-
 interface typeNumberGuage {
     value: number
 }
@@ -35,8 +22,6 @@ interface typePropsChartData {
 export type {
     AppPaperProps,
     PropsButton,
-    typeReportChart,
-    TypeSliderProps,
     typeNumberGuage,
     typePropsChartData
 }
