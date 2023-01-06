@@ -25,11 +25,13 @@ const WsButton = () => {
     useEffect(() => {
 
         if (socketUrl === null) {
-            console.log('Update Socket URL')
+            console.log('Update Socket Status')
             setSocketUrl(urlStatus)
         } else {
             if (lastMessage !== null) {
-                console.log(lastMessage)
+                console.log('test ws')
+                // console.log(lastMessage.data)
+                // console.log(lastMessage)
             }
         }
     }, [lastMessage, socketUrl])

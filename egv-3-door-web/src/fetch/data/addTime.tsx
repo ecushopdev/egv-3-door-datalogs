@@ -1,9 +1,9 @@
 import { httpClient } from '../../services/httpClient';
-import { typeTimeValue } from '../../util/type/TypeFormTime';
+import { typeTimeSettings } from '../../util/type/TypeFormTime';
 import { APIAddTime } from '../../util/url/urlFetch';
 import { Code } from '../../util/code';
 
-const AddTimeRace = async (props: typeTimeValue) => {
+const AddTimeRace = async (props: typeTimeSettings) => {
     let data: any = null
     return await httpClient.post(APIAddTime, props).then(res => {
         data = res.data

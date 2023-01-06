@@ -1,4 +1,4 @@
-export interface typeTimeValue {
-    timeout1: number | undefined;
-    timeout2: number | undefined;
+export interface typeTimeSettings {
+    timeout1: number
+    timeout2: number
 }

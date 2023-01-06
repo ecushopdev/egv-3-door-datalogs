@@ -1,6 +1,7 @@
 import { atom } from "recoil";
 import { typeEgvSenderData } from "../../util/type/TypeEgvData";
 import dayjs from 'dayjs';
+import { typeTimeSettings } from "../../util/type/TypeFormTime";
 
 const atomLastMessage = atom<Object>({
     key: 'atomLastMessage',
@@ -51,10 +52,15 @@ const loadDataRealtime = atom<typeEgvSenderData[]>({
     default: []
 })
 
+const timeSetting = atom<typeTimeSettings>({
+    key: 'timeSetting',
+    default: { timeout1: 0, timeout2: 0 }
+})
+
 export {
     atomLastMessage,
     atomAllDataChart,
-
+    timeSetting,
     loadDataRealtime
 }
 

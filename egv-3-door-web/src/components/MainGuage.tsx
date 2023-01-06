@@ -8,12 +8,14 @@ import DialogTitle from '@mui/material/DialogTitle';
 import DialogContent from '@mui/material/DialogContent';
 import { typeEgvSenderData } from '../util/type/TypeEgvData';
 import AppFormSetting from '../modules/Form/AppFormSetting';
-import { typeTimeValue } from '../util/type/TypeFormTime';
 import AddTimeRace from '../fetch/data/addTime';
 
 import IconButton from '@mui/material/IconButton';
 import SettingsIcon from '@mui/icons-material/Settings';
 import DistanceMeter from './realtime/Guage/DistanceMeter';
+import { typeTimeSettings } from '../util/type/TypeFormTime';
+import { useRecoilState } from 'recoil';
+import { timeSetting } from '../recoil/atom/atom';
 
 interface Props {
     payLoad: typeEgvSenderData | null;
@@ -31,10 +33,7 @@ const MainGuage = ({ payLoad }: Props) => {
     const [position, setPosition] = useState<number>(0)
     const [open, setOpen] = React.useState(false)
 
-    const [timeValue, setTimeValue] = useState<typeTimeValue>({
-        timeout1: 0,
-        timeout2: 0
-    })
+    const [timeValue, setTimeValue] = useRecoilState<typeTimeSettings>(timeSetting)
 
     const handleChangeDistance = (event: Event, newValue: number | number[]) => {
         const val = newValue as number;
@@ -58,10 +57,11 @@ const MainGuage = ({ payLoad }: Props) => {
         }
     }, [intervalState])
 
-    const processSetting = async (data: typeTimeValue) => {
+    const processSetting = async (data: typeTimeSettings) => {
         handleClose()
         setTimeValue(data)
         const addTime = await AddTimeRace(data)
+        console.log('wait send data')
         console.log(data)
     }
 

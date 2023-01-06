@@ -1,5 +1,5 @@
 import { selector } from "recoil";
-import { atomAllDataChart, atomLastMessage, loadDataRealtime, } from "../atom/atom";
+import { atomAllDataChart, atomLastMessage, loadDataRealtime, timeSetting, } from "../atom/atom";
 import { typeEgvSenderData } from "../../util/type/TypeEgvData";
 
 const selectMessageWs = selector<Object>({
@@ -30,9 +30,16 @@ const addItem = selector({
     }
 })
 
+const selectTimeSetting = selector({
+    key: 'selectTimeSetting',
+    get: ({ get }) => {
+        return get(timeSetting)
+    }
+})
+
 export {
     selectMessageWs,
-    selectAllDataChart
-
-    , addItem
+    selectAllDataChart,
+    addItem,
+    selectTimeSetting
 }

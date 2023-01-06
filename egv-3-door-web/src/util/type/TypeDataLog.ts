@@ -4,7 +4,6 @@ interface typeDataLogSender {
 }
 
 interface typeDataLogDto {
-    // race: string | null
     soc: number | null
     rangeToGo: number | null
     dragDistance: number | null
