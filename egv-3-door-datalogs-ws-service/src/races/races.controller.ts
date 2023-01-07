@@ -29,7 +29,7 @@ import {
   ApiTags,
 } from '@nestjs/swagger';
 import { RaceEntity } from './entities/race.entity';
-import { UpdateQuery } from 'mongoose';
+import { FilterQuery, UpdateQuery } from 'mongoose';
 import dayjs from 'dayjs';
 import { ParseObjectIdPipe } from '../common/pipe/ParseObjectId.pipe';
 import { Races, RaceStatus } from './schema/race.schema';
@@ -45,6 +45,8 @@ import { VideoValidatePipe } from '../common/pipe/video-validate.pipe';
 import { S3 } from 'aws-sdk';
 import { UploadService } from '../upload/upload.service';
 import { InjectS3, S3 as NestJsS3 } from 'nestjs-s3';
+import { RaceDatalogsEntity } from './entities/race-datalogs.entity';
+import { DataLogs } from '../datalogs/schema/datalogs.schema';
 
 @Controller('races')
 @ApiTags('Races')
@@ -80,7 +82,7 @@ export class RacesController {
   @ApiOkResponse({ type: RaceOneEntity })
   @ApiNotFoundResponse({ type: NotFoundErrorEntity })
   async findOne(@Param('id', new ParseObjectIdPipe()) id: string) {
-    const response = await this.racesService.findOneAggregation(id);
+    const response = await this.racesService.findOne(id);
     if (!response) {
       throw new NotFoundException('Not found race');
     }
@@ -153,6 +155,20 @@ export class RacesController {
       data: { id },
     });
     return res.status(HttpStatus.NO_CONTENT).send();
+  }
+
+  @Get(':id/datalogs')
+  @ApiOkResponse({ type: RaceDatalogsEntity, isArray: true })
+  @ApiNotFoundResponse({ type: NotFoundErrorEntity })
+  async findDataLogs(@Param('id', new ParseObjectIdPipe()) id: string) {
+    const filter: FilterQuery<DataLogs> = {
+      race: id,
+    };
+    const response = await this.datalogsService.findAll({ filter });
+    if (!response) {
+      throw new NotFoundException('Not found race');
+    }
+    return response;
   }
 
   @Post(':id/video')

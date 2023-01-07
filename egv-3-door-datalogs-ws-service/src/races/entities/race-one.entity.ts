@@ -1,6 +1,5 @@
 import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
 import { RaceStatus } from '../schema/race.schema';
-import { RaceDatalogsEntity } from './race-datalogs.entity';
 
 export class RaceOneEntity {
   @ApiProperty({
@@ -17,8 +16,6 @@ export class RaceOneEntity {
   timeout1: number = undefined;
   @ApiProperty({ type: Number })
   timeout2: number = undefined;
-  @ApiPropertyOptional({ type: RaceDatalogsEntity, isArray: true })
-  datalogs: RaceDatalogsEntity[] = undefined;
   @ApiPropertyOptional({ type: String })
   videoUrl?: string = undefined;
 }
