@@ -2,14 +2,23 @@ import Button from '@mui/material/Button'
 import React, { useEffect, useState } from 'react'
 import useWebSocket from 'react-use-websocket'
 import { protocolStatus, urlStatus } from '../../shared/contstant/WsURL'
+import { useRecoilValue } from 'recoil'
+import { selectTimeSetting } from '../../recoil/selectors/selector'
+import AddTimeRace from '../../fetch/data/addTime'
 
 const WsButton = () => {
     const [buttonText, setButtonText] = useState<string>('Reset')
 
     const [socketUrl, setSocketUrl] = useState<string | null>(urlStatus)
 
+    const [objData, setObjectData] = useState<Object | null>(null)
+
+    const timeSetting = useRecoilValue(selectTimeSetting)
+
     const {
-        lastMessage, readyState
+        sendJsonMessage,
+        lastMessage,
+        readyState
     } = useWebSocket(socketUrl, {
         protocols: protocolStatus,
         onOpen: () => (async () => {
@@ -22,6 +31,11 @@ const WsButton = () => {
         shouldReconnect: (closeEvent) => true
     });
 
+    const sendSetting = async () => {
+        const addTime = await AddTimeRace(timeSetting)
+        await sendJsonMessage(timeSetting)
+    }
+
     useEffect(() => {
 
         if (socketUrl === null) {
@@ -30,7 +44,8 @@ const WsButton = () => {
         } else {
             if (lastMessage !== null) {
                 console.log('test ws')
-                // console.log(lastMessage.data)
+                console.log(lastMessage.data)
+                setObjectData(lastMessage.data)
                 // console.log(lastMessage)
             }
         }
@@ -39,6 +54,9 @@ const WsButton = () => {
     return (
         <>
             <Button
+                variant='contained'
+                color='inherit'
+                onClick={sendSetting}
             >
                 {buttonText}
             </Button>

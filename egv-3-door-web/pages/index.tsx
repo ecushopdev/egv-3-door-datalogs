@@ -45,10 +45,14 @@
 // export default Index
 
 import React from 'react'
+import Add from './test/add'
+import View from './view'
 
 const index = () => {
   return (
     <>
+      <Add />
+      {/* <View /> */}
     </>
   )
 }

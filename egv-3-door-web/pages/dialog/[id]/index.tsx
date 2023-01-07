@@ -1,29 +1,22 @@
-import Grid from '@mui/material/Grid';
-import React from 'react'
+import { useRouter } from 'next/dist/client/router'
+import React, { useEffect } from 'react'
+import GetDataLogs from '../../../src/fetch/data/getDataLogs';
+import { typeFetchData } from '../../../src/util/type/TypeFetch';
 
-export const clientCheckFetch = async (context: any) => {
+const index = () => {
+    const router = useRouter()
+    const raceID = router.query.id
 
-    let dataLoad: string[] = ['1', '2'];
-    const { id }: any = context.params
-
-    if (dataLoad.includes(id)) {
-        return {
-            props: { id },
-        };
-    } else {
-        return {
-            notFound: true,
-        };
+    const checkId = async (id: string) => {
+        const loadData: string[] = await GetDataLogs().then(data => data)
     }
-}
 
-const index = (props: any) => {
-    const { id } = props
+    useEffect(() => {
+        console.log(raceID)
+    }, [])
     return (
         <>
-            <Grid>
-
-            </Grid>
+            {raceID}
         </>
     )
 }

@@ -6,11 +6,11 @@ import TextField from '@mui/material/TextField';
 import { SubmitHandler, Controller, useForm } from 'react-hook-form';
 import * as Yup from 'yup';
 import { yupResolver } from '@hookform/resolvers/yup';
-import { typeTimeValue } from '../../util/type/TypeFormTime';
+import { typeTimeSettings } from '../../util/type/TypeFormTime';
 
 interface typeFormSubmit {
-    defaultValues: typeTimeValue | null
-    onSubmit: SubmitHandler<typeTimeValue>;
+    defaultValues: typeTimeSettings | null
+    onSubmit: SubmitHandler<typeTimeSettings>;
     open: () => void
 }
 
@@ -31,7 +31,7 @@ const AppFormSetting: React.FC<typeFormSubmit> = ({
         control,
         handleSubmit,
         formState: { errors, isSubmitting, isSubmitSuccessful },
-    } = useForm<typeTimeValue>({
+    } = useForm<typeTimeSettings>({
         defaultValues: defaultValues ? {
             timeout1: defaultValues.timeout1,
             timeout2: defaultValues.timeout2
@@ -43,7 +43,10 @@ const AppFormSetting: React.FC<typeFormSubmit> = ({
     })
 
     useEffect(() => {
-    }, [isSubmitting]);
+        if (isSubmitSuccessful) {
+            reset()
+        }
+    }, [isSubmitting, isSubmitSuccessful]);
 
     return (
         <Grid

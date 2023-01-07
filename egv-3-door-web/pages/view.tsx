@@ -11,7 +11,7 @@ import DataLog from '../src/components/datalog/DataLog';
 
 const View = () => {
 
-    const [open, setOpen] = useState<boolean>(false)
+    // const [open, setOpen] = useState<boolean>(false)
     const [value, setValue] = React.useState('1');
 
     const handleChange = (event: React.SyntheticEvent, newValue: string) => {
@@ -29,8 +29,8 @@ const View = () => {
                         </TabList>
                     </Box>
                     <TabPanel value="1">
-                        <Tab1 />
                         <WsButton />
+                        <Tab1 />
                         {/* <MainGraph /> */}
                     </TabPanel>
                     <TabPanel value="2">

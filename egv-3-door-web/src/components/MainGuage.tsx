@@ -8,7 +8,6 @@ import DialogTitle from '@mui/material/DialogTitle';
 import DialogContent from '@mui/material/DialogContent';
 import { typeEgvSenderData } from '../util/type/TypeEgvData';
 import AppFormSetting from '../modules/Form/AppFormSetting';
-import AddTimeRace from '../fetch/data/addTime';
 
 import IconButton from '@mui/material/IconButton';
 import SettingsIcon from '@mui/icons-material/Settings';
@@ -60,9 +59,7 @@ const MainGuage = ({ payLoad }: Props) => {
     const processSetting = async (data: typeTimeSettings) => {
         handleClose()
         setTimeValue(data)
-        const addTime = await AddTimeRace(data)
-        console.log('wait send data')
-        console.log(data)
+        console.log('Timeout Setting ', data)
     }
 
     const reset = () => {
@@ -75,7 +72,6 @@ const MainGuage = ({ payLoad }: Props) => {
 
     useEffect(() => {
         if (payLoad === null) {
-            console.log(payLoad)
             stopProcess()
         } else {
             processData(payLoad)

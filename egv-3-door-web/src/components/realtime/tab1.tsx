@@ -19,7 +19,7 @@ const Tab1 = () => {
     const [subData, setSubData] = useRecoilState<typeEgvSenderData[]>(loadDataRealtime)
 
     const [lastData, setLastData] = useState<typeEgvSenderData | null>(null)
-    const [socketUrl, setSocketUrl] = useState<string | null>(null)
+    const [socketUrl, setSocketUrl] = useState<string | null>(urlReceive)
 
     const {
         lastMessage, readyState

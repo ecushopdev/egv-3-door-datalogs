@@ -16,9 +16,8 @@ import { DataGrid, GridRowsProp, GridColDef } from '@mui/x-data-grid';
 import { GridRenderCellParams } from '@mui/x-data-grid/models'
 import { dummyData } from '../../src/util/helper/oldGenData/genArrayDataLogsID'
 import { typeDataLogDto } from '../../src/util/type/TypeDataLog'
-
-const sleep = (ms: number) => new Promise((r) => setTimeout(r, ms))
-
+import Link from 'next/link'
+import { sleep } from '../../src/util/helper/sleep'
 
 const Add = () => {
 
@@ -69,14 +68,31 @@ const Add = () => {
         setIsLoading(false)
     }
 
+    const preventDefault = (event: React.SyntheticEvent) => event.preventDefault();
 
     const columes2: GridColDef[] = [
-        { field: 'id', headerName: 'Race ID', width: 150 },
-        { field: 'timeout1', headerName: 'Timeout 1', width: 150 },
-        { field: 'timeout2', headerName: 'Timeout 2', width: 150 },
-        { field: 'startTimestamp', headerName: 'Start Timestamp', width: 150 },
         {
-            field: 'menu', headerName: 'Menu', width: 150,
+            field: 'id', headerName: 'Race ID', minWidth: 250,
+            renderCell: ((params: GridRenderCellParams) => {
+                return (
+                    <>
+                        <Link
+                            href="/dialog/[id]"
+                            as={`dialog/${params.id}/`}
+                            key={params.id}
+                        >
+                            {params.row.id}
+                        </Link>
+                    </>
+                )
+            })
+        },
+        { field: 'status', headerName: 'Status', minWidth: 150 },
+        { field: 'timeout1', headerName: 'Timeout 1', minWidth: 150 },
+        { field: 'timeout2', headerName: 'Timeout 2', minWidth: 150 },
+        { field: 'startTimestamp', headerName: 'Start Timestamp', minWidth: 200 },
+        {
+            field: 'menu', headerName: 'Menu', minWidth: 150,
             align: 'center',
             renderCell: ((param: GridRenderCellParams) => {
                 const { row } = param
@@ -158,6 +174,7 @@ const Add = () => {
                             // autoHeight
                             loading={isLoading}
                             rowCount={5}
+                            disableColumnSelector={true}
                             rows={rowData ? rowData : []}
                             columns={columes2} />
                     </Box>
